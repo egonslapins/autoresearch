@@ -1,0 +1,360 @@
+"""
+Core research loop — the heart of autoresearch.
+
+Implements the Karpathy-style iterative improvement loop adapted for web research:
+  1. Read current state (research.md + results.tsv)
+  2. Identify knowledge gaps via LLM
+  3. Execute web searches targeting those gaps
+  4. Synthesize new findings with existing research via LLM
+  5. Evaluate quality (score 0-100)
+  6. If improved → update research.md + git commit
+  7. Log iteration to results.tsv
+  8. Repeat until quality threshold or max iterations
+"""
+
+from __future__ import annotations
+
+import csv
+import datetime
+import logging
+import os
+import subprocess
+import textwrap
+from pathlib import Path
+
+import httpx
+
+from evaluator import score as evaluate_research
+from searcher import Searcher
+
+logger = logging.getLogger(__name__)
+
+# ------------------------------------------------------------------
+# LLM call helper
+# ------------------------------------------------------------------
+
+def _llm_call(
+    prompt: str,
+    *,
+    system: str = "",
+    api_key: str = "",
+    model: str = "anthropic/claude-sonnet-4-6",
+    base_url: str = "https://openrouter.ai/api/v1",
+    max_tokens: int = 4096,
+    temperature: float = 0.4,
+) -> str:
+    """Make a single LLM call via OpenRouter and return the text response."""
+    messages = []
+    if system:
+        messages.append({"role": "system", "content": system})
+    messages.append({"role": "user", "content": prompt})
+
+    with httpx.Client(timeout=120.0) as client:
+        resp = client.post(
+            f"{base_url}/chat/completions",
+            headers={
+                "Authorization": f"Bearer {api_key}",
+                "Content-Type": "application/json",
+            },
+            json={
+                "model": model,
+                "messages": messages,
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+            },
+        )
+        resp.raise_for_status()
+        data = resp.json()
+
+    return data["choices"][0]["message"]["content"].strip()
+
+
+# ------------------------------------------------------------------
+# Gap identification
+# ------------------------------------------------------------------
+
+GAP_SYSTEM = """You are a research strategist. Given a research topic and the current state of research, identify 3-5 specific knowledge gaps that should be filled next. For each gap, generate 1-2 precise search queries that would help fill it.
+
+Respond with ONLY a JSON array (no markdown, no explanation):
+[
+  {"gap": "description of gap", "queries": ["search query 1", "search query 2"]},
+  ...
+]
+"""
+
+
+def _identify_gaps(
+    topic: str,
+    current_research: str,
+    iteration: int,
+    *,
+    api_key: str,
+    model: str,
+) -> list[dict]:
+    """Identify knowledge gaps and generate search queries."""
+    prompt = f"""TOPIC: {topic}
+
+ITERATION: {iteration}
+
+CURRENT RESEARCH:
+{current_research[:8000] if current_research else "(empty — this is the first iteration)"}
+
+Identify the most important knowledge gaps to fill next. Focus on:
+- If iteration 1: cover the basics — what, who, when, why, how
+- If iteration 2-5: go deeper — specific examples, data, comparisons
+- If iteration 6+: fill remaining gaps — edge cases, expert opinions, future trends
+"""
+
+    try:
+        content = _llm_call(prompt, system=GAP_SYSTEM, api_key=api_key, model=model, max_tokens=1000, temperature=0.5)
+        # Strip markdown code fences if present
+        if content.startswith("```"):
+            content = content.split("\n", 1)[1]
+            if content.endswith("```"):
+                content = content[:-3]
+            content = content.strip()
+
+        import json
+        return json.loads(content)
+    except Exception as e:
+        logger.warning("Gap identification failed: %s — using topic as query", e)
+        return [{"gap": "General overview", "queries": [topic]}]
+
+
+# ------------------------------------------------------------------
+# Synthesis
+# ------------------------------------------------------------------
+
+SYNTH_SYSTEM = """You are a research synthesizer. Your job is to merge NEW search findings into an EXISTING research document, producing an improved version.
+
+Rules:
+- Preserve all existing valid information
+- Add new information in the appropriate sections
+- Create new sections if needed
+- Include source URLs inline as [Source](url) markdown links
+- Use clear markdown structure with ## headers
+- Be factual and specific — include numbers, dates, names
+- Do NOT remove existing content unless it is factually wrong
+- The document should read as a coherent research report, not a list of search results
+"""
+
+
+def _synthesize(
+    topic: str,
+    current_research: str,
+    search_results: list[dict],
+    *,
+    api_key: str,
+    model: str,
+) -> str:
+    """Synthesize search results into updated research document."""
+    # Format search results
+    formatted_results = []
+    for i, r in enumerate(search_results, 1):
+        formatted_results.append(
+            f"### Result {i}: {r.get('title', 'N/A')}\n"
+            f"URL: {r.get('url', 'N/A')}\n"
+            f"Snippet: {r.get('snippet', 'N/A')}\n"
+            f"Content: {r.get('content', '')[:3000]}\n"
+        )
+
+    results_text = "\n".join(formatted_results)
+
+    prompt = f"""TOPIC: {topic}
+
+CURRENT RESEARCH DOCUMENT:
+{current_research[:8000] if current_research else "(empty — create a new research document)"}
+
+NEW SEARCH FINDINGS:
+{results_text[:8000]}
+
+Produce the COMPLETE updated research document in markdown. Start with a # title."""
+
+    return _llm_call(
+        prompt,
+        system=SYNTH_SYSTEM,
+        api_key=api_key,
+        model=model,
+        max_tokens=4096,
+        temperature=0.3,
+    )
+
+
+# ------------------------------------------------------------------
+# Git helpers
+# ------------------------------------------------------------------
+
+def _git(args: list[str], cwd: str) -> str:
+    """Run a git command and return stdout."""
+    result = subprocess.run(
+        ["git"] + args,
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        logger.warning("git %s failed: %s", " ".join(args), result.stderr.strip())
+    return result.stdout.strip()
+
+
+# ------------------------------------------------------------------
+# Results TSV
+# ------------------------------------------------------------------
+
+TSV_HEADER = ["iteration", "timestamp", "score", "completeness", "depth", "novelty", "sources", "gaps", "action"]
+
+
+def _log_result(tsv_path: Path, iteration: int, eval_result: dict, action: str):
+    """Append a row to results.tsv."""
+    file_exists = tsv_path.exists()
+    with open(tsv_path, "a", newline="") as f:
+        writer = csv.writer(f, delimiter="\t")
+        if not file_exists:
+            writer.writerow(TSV_HEADER)
+        writer.writerow([
+            iteration,
+            datetime.datetime.now().isoformat(timespec="seconds"),
+            eval_result.get("total", 0),
+            eval_result.get("completeness", 0),
+            eval_result.get("depth", 0),
+            eval_result.get("novelty", 0),
+            eval_result.get("sources", 0),
+            "; ".join(eval_result.get("gaps", [])),
+            action,
+        ])
+
+
+# ------------------------------------------------------------------
+# Main loop
+# ------------------------------------------------------------------
+
+def run_loop(
+    topic: str,
+    *,
+    max_iterations: int = 10,
+    threshold: int = 80,
+    output: str = "research.md",
+    model: str = "anthropic/claude-sonnet-4-6",
+    project_dir: str | None = None,
+) -> dict:
+    """
+    Run the iterative research loop.
+
+    Returns a summary dict with final score, iterations run, and output path.
+    """
+    project_dir = project_dir or os.getcwd()
+    output_path = Path(project_dir) / output
+    tsv_path = Path(project_dir) / "results.tsv"
+    api_key = os.environ.get("OPENROUTER_API_KEY", "")
+
+    if not api_key:
+        raise RuntimeError("OPENROUTER_API_KEY environment variable is required")
+
+    searcher = Searcher()
+    best_score = 0
+    current_research = ""
+
+    # Load existing research if present
+    if output_path.exists():
+        current_research = output_path.read_text()
+        logger.info("Loaded existing research from %s (%d chars)", output_path, len(current_research))
+
+    print(f"\n{'='*60}")
+    print(f"  AUTORESEARCH — Iterative Web Research Engine")
+    print(f"  Topic: {topic}")
+    print(f"  Model: {model}")
+    print(f"  Max iterations: {max_iterations}")
+    print(f"  Quality threshold: {threshold}/100")
+    print(f"  Output: {output_path}")
+    print(f"{'='*60}\n")
+
+    for iteration in range(1, max_iterations + 1):
+        print(f"--- Iteration {iteration}/{max_iterations} ---")
+
+        # Step 1: Identify gaps
+        print("  [1/5] Identifying knowledge gaps...")
+        gaps = _identify_gaps(topic, current_research, iteration, api_key=api_key, model=model)
+        all_queries = []
+        for g in gaps:
+            all_queries.extend(g.get("queries", []))
+        print(f"        Found {len(gaps)} gaps, {len(all_queries)} search queries")
+
+        # Step 2: Execute searches
+        print("  [2/5] Searching the web...")
+        results = searcher.search(all_queries, max_results_per_query=3)
+        print(f"        Found {len(results)} unique results")
+
+        if not results:
+            print("        No results found — skipping iteration")
+            _log_result(tsv_path, iteration, {"total": best_score}, "skip:no_results")
+            continue
+
+        # Step 3: Fetch content for top results (up to 5)
+        print("  [3/5] Fetching page content...")
+        for r in results[:5]:
+            if not r.content:
+                r.content = searcher.fetch_url(r.url)
+
+        # Step 4: Synthesize
+        print("  [4/5] Synthesizing findings...")
+        search_dicts = [
+            {"url": r.url, "title": r.title, "snippet": r.snippet, "content": r.content}
+            for r in results
+        ]
+        new_research = _synthesize(topic, current_research, search_dicts, api_key=api_key, model=model)
+
+        # Step 5: Evaluate
+        print("  [5/5] Evaluating quality...")
+        eval_result = evaluate_research(new_research, topic, api_key=api_key, model=model)
+        new_score = eval_result.get("total", 0)
+
+        print(f"        Score: {new_score}/100 (prev best: {best_score})")
+        print(f"        Completeness={eval_result.get('completeness',0)} "
+              f"Depth={eval_result.get('depth',0)} "
+              f"Novelty={eval_result.get('novelty',0)} "
+              f"Sources={eval_result.get('sources',0)}")
+
+        if eval_result.get("gaps"):
+            print(f"        Remaining gaps: {', '.join(eval_result['gaps'][:3])}")
+
+        # Decision: commit or skip
+        if new_score > best_score:
+            print(f"  >> IMPROVEMENT (+{new_score - best_score}) — committing")
+            current_research = new_research
+            best_score = new_score
+            output_path.write_text(current_research)
+            _git(["add", output, "results.tsv"], cwd=project_dir)
+            _git(
+                ["commit", "-m", f"iteration {iteration}: score {new_score}/100 (+{new_score - best_score})"],
+                cwd=project_dir,
+            )
+            _log_result(tsv_path, iteration, eval_result, "commit")
+        else:
+            print(f"  >> No improvement — skipping")
+            _log_result(tsv_path, iteration, eval_result, "skip:no_improvement")
+
+        # Check threshold
+        if best_score >= threshold:
+            print(f"\n  Quality threshold reached ({best_score} >= {threshold}). Stopping.")
+            break
+
+        print()
+
+    # Final summary
+    summary = {
+        "topic": topic,
+        "iterations": iteration,
+        "final_score": best_score,
+        "output": str(output_path),
+        "tsv": str(tsv_path),
+    }
+
+    print(f"\n{'='*60}")
+    print(f"  RESEARCH COMPLETE")
+    print(f"  Final score: {best_score}/100")
+    print(f"  Iterations: {iteration}")
+    print(f"  Output: {output_path}")
+    print(f"  Log: {tsv_path}")
+    print(f"{'='*60}\n")
+
+    return summary
