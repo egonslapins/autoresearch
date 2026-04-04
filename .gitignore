@@ -31,6 +31,6 @@ secrets/
 .DS_Store
 Thumbs.db
 
-# Project outputs (tracked separately)
-# research.md is tracked (it's the output)
-# results.tsv is tracked (iteration log)
+# Project outputs — research data may contain sensitive/client topics
+research.md
+results.tsv
