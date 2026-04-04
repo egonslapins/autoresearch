@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-This report analyzes the opportunity to build a business-class-only flight deal subscription platform, modeled on the success of Going.com (formerly Scott's Cheap Flights) but focused exclusively on premium cabin fares. The global premium cabin market represents a ~$30B opportunity, and no dominant player has yet captured the business-class-deals subscription niche. This document covers market sizing, competitor analysis, technology requirements, revenue models, and build strategy for a solo founder leveraging AI.
+This report analyzes the opportunity to build a business-class-only flight deal subscription platform, modeled on the success of Going.com (formerly Scott's Cheap Flights) but focused exclusively on premium cabin fares. The global premium cabin market represents a ~$30B opportunity, and no dominant player has yet captured the business-class-deals subscription niche. This document covers market sizing, competitor analysis, technology requirements, revenue models, conversion benchmarks, and build strategy for a solo founder leveraging AI.
 
 ---
 
@@ -152,166 +152,140 @@ Distribution Layer
 - **Supabase or PlanetScale:** Backend database for members and fare history
 
 ### Error Fare Detection Logic
-1. Pull current fare for route X in business class
-2. Compare against 90-day rolling average for same route/cabin/season
-3. Flag if price is >40% below baseline AND available on multiple booking channels
-4. Secondary check: Is the fare bookable? (Not already pulled)
-5. Tertiary check: Is this a known sale vs. genuine error? (Airline announcement lookup)
-6. Human review (or AI-assisted review) before sending alert
+1. Establish rolling baseline fare per route/cabin/season using 90-day historical data
+2. Flag fares that deviate >40% below baseline as potential deals
+3. Cross-reference against multiple data sources to confirm the fare is live
+4. Classify: error fare (likely short-lived, book immediately) vs. sale fare (stable, days to book)
+5. Score deal quality: savings %, number of travel dates available, airline reliability
+6. Auto-generate alert copy via LLM with booking instructions and expiry urgency
 
 ---
 
-## Revenue Models
+## Revenue Model & Pricing Strategy
 
-### Model 1: Pure Subscription (Recommended Primary)
-- **Free tier:** 1–2 deal alerts/month, limited origins
-- **Premium tier:** $199–$299/year — unlimited business class deal alerts, all origins
-- **Concierge tier:** $499–$999/year — personalized monitoring for specific routes + booking assistance
+### Subscription Tiers (Recommended for Business-Class-Only Platform)
 
-**Pros:** Predictable recurring revenue, aligns incentives with member (find real deals, not just affiliate-optimized deals), high LTV  
-**Cons:** Requires critical mass of subscribers before profitability
-
-**Unit Economics Example:**
-- 10,000 subscribers × $249/year = $2.49M ARR
-- 50,000 subscribers × $249/year = $12.45M ARR
-- Going.com achieved 2M subscribers at $49–$199 blended — business-class-only will have smaller TAM but higher ARPU
-
-### Model 2: Affiliate/Commission Hybrid
-- Earn 1–3% commission on bookings made through tracked links
-- Average business class ticket: $2,000–$8,000
-- Commission per booking: $40–$240
-- **Risk:** Incentive misalignment — platform may favor bookable (commissionable) deals over best deals
-
-### Model 3: Travel Agency / OTA Model (SkyLux approach)
-- Actually book the tickets, earn margin on fare difference or GDS incentive payments
-- Requires IATA accreditation, higher regulatory burden
-- Higher revenue per transaction but much higher operational complexity
-- Not recommended for solo founder MVP
-
-### Model 4: B2B / Corporate Subscription
-- Sell to corporate travel managers or TMCs (Travel Management Companies)
-- Price: $5,000–$50,000/year per corporate account
-- Smaller number of customers, much higher ACV
-- Requires enterprise sales motion
-
-### Recommended Revenue Stack (Staged)
-1. **Year 1:** Subscription only ($199–$299/year), build to 1,000 paying subscribers
-2. **Year 2:** Add affiliate links as secondary revenue; introduce concierge tier
-3. **Year 3:** Explore B2B/corporate tier; potentially add booking functionality via NDC API
-
----
-
-## Subscription Pricing Strategy
-
-### Willingness to Pay — Business Class Traveler
-- A single business class deal saving $1,500 on a $4,000 ticket justifies a $299/year subscription 5x over
-- Target customer has household income $150K+ and values time over price-hunting
-- Price anchoring: "One deal pays for 5 years of membership"
-
-### Pricing Benchmarks
-| Service | Price | Cabin Focus |
+| Tier | Price | Features |
 |---|---|---|
-| Going.com Free | $0 | Economy |
-| Going.com Premium | $49/year | Economy |
-| Going.com Elite | $199/year | Business + Economy |
-| Thrifty Traveler Premium | $99/year | Mixed |
-| **Proposed Business Class Only Platform** | **$199–$299/year** | **Business Class Only** |
+| **Free** | $0 | 1–2 deals/month, email only, 7-day delay |
+| **Premium** | $199/year (~$16.58/mo) | All business class deals, instant alerts, all origins |
+| **Elite** | $349/year (~$29/mo) | Premium + first class, concierge booking help, API access |
 
-### Pricing Psychology
-- Annual billing preferred (reduces churn, improves cash flow)
-- Monthly option at $24.99/month (implies $299/year) to capture hesitant buyers
-- Founding member pricing ($99/year lifetime or first year) to build initial subscriber base
+**Rationale:**
+- Going.com charges $199/year for a bolt-on business class tier within an economy product
+- A purpose-built business class platform justifies a higher price point ($199–$349/year)
+- The target customer (premium traveler) has demonstrated willingness to pay for quality information
+- A single deal saving $2,000–$5,000 on a business class ticket makes a $349/year subscription a 10–15x ROI
+
+### Affiliate Revenue Layer
+- When members click through to book, use tracked affiliate links via:
+  - **Travelpayouts** — aggregates airline affiliate programs
+  - **CJ Affiliate / Rakuten** — major airline programs (Delta, United, BA, etc.)
+  - **Direct airline affiliate programs** — higher commission rates (1–5% of ticket value)
+- Business class ticket average: $3,000–$8,000 → affiliate commission: $60–$400 per booking
+- Even at low click-through rates, affiliate revenue can meaningfully supplement subscription income
+
+### Revenue Model Comparison
+
+| Model | Pros | Cons |
+|---|---|---|
+| Subscription only | Predictable MRR, no booking risk | Slower growth, churn risk |
+| Affiliate only | No subscription friction | Unpredictable, algorithm-dependent |
+| Hybrid (subscription + affiliate) | Best of both; aligns incentives | Slightly more complex |
+| Travel agency (like SkyLux) | Higher revenue per transaction | Requires licensing, booking risk, staffing |
+
+**Recommendation:** Hybrid model — subscription as primary revenue, affiliate as secondary. Avoid acting as a travel agency in early stages.
 
 ---
 
-## Go-To-Market Strategy for Solo Founder
+## SaaS Conversion Rate Benchmarks for Subscription Platforms
+
+Understanding industry conversion benchmarks is critical for modeling subscriber growth and optimizing the funnel for a business-class flight deal subscription service. [Source](https://www.artisangrowthstrategies.com/blog/saas-conversion-rate-benchmarks-2026-data-1200-companies)
+
+### Key Funnel Benchmarks (2026 Data, 1,200+ SaaS Companies)
+
+| Funnel Stage | Bottom 25% | Average | Elite (Top 10%) |
+|---|---|---|---|
+| Visitor-to-Lead | <0.7% | 1.5–2.5% | 8–15% |
+| MQL-to-SQL | <20% | 32–40% | 39–40%+ |
+| SQL-to-Close | <15% | 20–25% | 30%+ |
+
+### Free-to-Paid Conversion Rates by Trial Model
+
+| Trial Model | Average | Top 10% |
+|---|---|---|
+| Freemium (self-serve) | 3–5% | 6–8% |
+| Free Trial (no credit card) | 4–6% | 10–15% |
+| Free Trial (credit card required) | 25–35% | 50–60% |
+| Median free-to-paid (all models, 2025) | 34% | — |
+
+**Key insight:** Opt-out trials (credit card required upfront) convert at **48.8%** on average vs. 18.2% for opt-in trials. For a premium subscription targeting high-income travelers, requiring a credit card at free trial signup is likely appropriate and will significantly improve conversion rates.
+
+### Trial Duration Impact
+- **7-day trials:** Highest conversion rate at **40.4%**
+- **Trials over 60 days:** Conversion drops to **30.6%**
+- **Recommendation:** Use a 7–14 day free trial with full access to demonstrate deal quality before charging
+
+### Marketing Channel Conversion Benchmarks
+- **SEO:** 2.1% visitor-to-lead rate — highest among organic channels
+- **PPC:** 0.7% visitor-to-lead rate
+- **LinkedIn:** Strong ROI with SQL-to-close rates of **39%** — highly relevant for targeting business travelers and corporate accounts
+- **Implication:** For a business-class platform, SEO content (deal alerts, route guides, "best business class to X" articles) and LinkedIn outreach to frequent business travelers are the highest-ROI acquisition channels
+
+### Application to Business Class Subscription Platform
+- At average conversion rates (1.5–2.5% visitor-to-lead, ~18% free-to-paid for opt-in trial):
+  - 10,000 monthly visitors → 150–250 leads → 27–45 new paid subscribers/month
+- At elite conversion rates (8–15% visitor-to-lead, ~50% free-to-paid with credit card):
+  - 10,000 monthly visitors → 800–1,500 leads → 400–750 new paid subscribers/month
+- **Year 1 target:** 1,000 paid subscribers at $199/year = **$199,000 ARR**
+- **Year 2 target:** 5,000 paid subscribers at blended $220/year = **$1.1M ARR**
+- **Year 3 target:** 20,000 paid subscribers = **$4.4M ARR** (approaching Going.com's estimated revenue with a fraction of the team)
+
+---
+
+## Go-To-Market Strategy
 
 ### Phase 1: Validation (Months 1–3)
-- Launch a free newsletter (Substack or Beehiiv) posting business class deals manually
-- Build audience of 1,000–5,000 subscribers before charging
-- Validate deal quality and open rates (target: 40%+ open rate)
-- Cost: ~$0–$500/month
+- Launch a free email newsletter with 2–3 business class deals per week
+- Build audience via Reddit (r/churning, r/awardtravel, r/solotravel), Twitter/X, LinkedIn
+- Target: 1,000 free subscribers before charging anything
+- Use Beehiiv or Substack for zero-infrastructure newsletter launch
+- Manually source deals to validate demand before building automation
 
 ### Phase 2: Monetization (Months 4–6)
-- Introduce paid tier at founding member price ($99/year)
-- Convert 5–10% of free list to paid
-- Begin building automated monitoring (Duffel API + Python scripts)
+- Introduce paid tier at $149–$199/year with 14-day free trial (credit card required)
+- Gate best deals (error fares, same-day alerts) behind paywall
+- Target: 200–500 paying subscribers = $30K–$100K ARR
+- Begin building automated fare monitoring infrastructure in parallel
 
 ### Phase 3: Scale (Months 7–18)
-- Full AI-powered monitoring live
-- SEO content strategy (business class deals, how to fly business class cheap)
-- Paid acquisition via Facebook/Instagram targeting frequent flyers
-- Referral program (give 1 month free for each referral)
+- Launch full AI-powered monitoring platform
+- Add origin airport personalization (members set home airports)
+- Introduce referral program (1 month free per referral)
+- SEO content strategy: "Business class deals from [City]" landing pages
+- Target: 2,000–5,000 paying subscribers
 
-### Acquisition Channels
-1. **SEO:** "Business class deals," "cheap business class flights," "mistake fares business class"
-2. **Reddit:** r/churning, r/awardtravel, r/solotravel — authentic deal sharing builds credibility
-3. **Twitter/X:** Real-time deal posting builds following quickly in travel community
-4. **YouTube/TikTok:** "I flew business class for $400" content drives massive organic reach
-5. **Partnerships:** Points/miles bloggers (The Points Guy, One Mile at a Time) — affiliate deals
-
----
-
-## Operational Considerations
-
-### Legal & Compliance
-- Error fares: Airlines sometimes cancel bookings made on mistake fares — need clear disclaimer policy
-- GDPR/CCPA compliance for subscriber data
-- Not acting as a travel agent (information service, not booking service) reduces regulatory burden
-- Terms of service must clarify: platform provides information, not booking guarantees
-
-### Data & API Costs (Estimated Monthly, Early Stage)
-| Service | Estimated Cost |
-|---|---|
-| Duffel API (NDC access) | $200–$500/month |
-| Email delivery (SendGrid) | $50–$200/month |
-| Cloud infrastructure (AWS/GCP) | $100–$300/month |
-| AI API calls (OpenAI/Anthropic) | $50–$200/month |
-| **Total** | **~$400–$1,200/month** |
-
-Break-even at $299/year pricing: ~50–60 paying subscribers covers infrastructure costs
-
-### Team Requirements (Solo Founder with AI)
-- **Fare monitoring:** Automated via API + AI anomaly detection
-- **Deal writing:** AI-generated drafts + founder review (15–30 min/deal)
-- **Customer support:** AI chatbot (Intercom + GPT) handles 80% of queries
-- **Marketing:** Scheduled social posts + newsletter automation
-- **Realistic time commitment:** 20–30 hours/week at launch, scaling down as automation matures
+### Acquisition Channels (Prioritized)
+1. **SEO** — "cheap business class flights," "business class mistake fares," route-specific pages
+2. **LinkedIn** — target frequent business travelers, corporate travel managers
+3. **Reddit/communities** — r/churning, r/awardtravel, FlyerTalk forums
+4. **Partnerships** — credit card bloggers, points/miles influencers (affiliate deals)
+5. **PR** — pitch "I found a $400 business class to Tokyo" stories to travel media
 
 ---
 
-## Financial Projections (Conservative)
+## Unit Economics & Financial Model
 
-| Milestone | Subscribers | ARR | Timeline |
-|---|---|---|---|
-| MVP Launch | 0 | $0 | Month 0 |
-| Free list | 2,000 free | $0 | Month 3 |
-| First revenue | 200 paid | $49,800 | Month 6 |
-| Early traction | 1,000 paid | $249,000 | Month 12 |
-| Growth stage | 5,000 paid | $1,245,000 | Month 24 |
-| Scale | 20,000 paid | $4,980,000 | Month 36 |
+### Key Metrics to Track
+- **CAC (Customer Acquisition Cost):** Target <$30 for organic, <$80 for paid
+- **LTV (Lifetime Value):** At $199/year with 3-year average retention = $597 LTV
+- **LTV:CAC ratio:** Target >5:1 for sustainable growth
+- **Monthly Churn:** Target <3%/month (36% annual) for subscription travel products
+- **Net Revenue Retention:** Upsell from $199 → $349 Elite tier improves NRR above 100%
 
-*Assumes $249/year average subscription price*
+### Revenue Projections (Conservative)
 
----
-
-## Key Risks & Mitigations
-
-| Risk | Mitigation |
-|---|---|
-| Airlines cancel error fares | Disclaim clearly; focus on sale fares not just errors |
-| API access revoked | Diversify data sources; maintain 3+ feed providers |
-| Going.com launches competing product | First-mover advantage in pure-play biz class niche |
-| Small TAM vs. economy deals | Higher ARPU compensates; target 50K subscribers not 2M |
-| Fare deals dry up | Diversify to points/miles deals, upgrade opportunities |
-
----
-
-## Sources & References
-
-- [Scott's Cheap Flights / Going.com — CompWorth Profile](https://compworth.com/company/scott-s-cheap-flights)
-- [Scott's Cheap Flights — IncFact Annual Report](https://incfact.com/company/scottscheapflights-portland-or/)
-
----
-
-*Document version: 1.0 | Last updated: 2025 | Status: Active research — additional sections on NDC API technical implementation, competitor deep-dives, and case studies to be added*
+| Year | Paid Subscribers | Avg. Revenue/Sub | ARR | Affiliate Revenue | Total Revenue |
+|---|---|---|---|---|---|
+| Year 1 | 1,000 | $199 | $199K | $20K | ~$220K |
+| Year 2 | 5,000 | $210
