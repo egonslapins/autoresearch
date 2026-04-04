@@ -67,6 +67,12 @@ Examples:
         help="Quality score threshold to stop (0-100, default: 80)",
     )
     parser.add_argument(
+        "--max-cost",
+        type=float,
+        default=2.0,
+        help="Maximum estimated API cost in USD before stopping (default: $2.00)",
+    )
+    parser.add_argument(
         "--verbose", "-v",
         action="store_true",
         help="Enable verbose logging",
@@ -100,6 +106,7 @@ Examples:
             threshold=args.threshold,
             output=args.output,
             model=args.model,
+            max_cost=args.max_cost,
             project_dir=args.project_dir or os.getcwd(),
         )
         sys.exit(0 if summary["final_score"] > 0 else 1)
