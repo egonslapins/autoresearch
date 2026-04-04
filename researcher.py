@@ -293,6 +293,27 @@ def _git(args: list[str], cwd: str) -> str:
     return result.stdout.strip()
 
 
+def _git_add_research(files: list[str], cwd: str):
+    """Add research output files to git, using -f to override .gitignore if needed."""
+    result = subprocess.run(
+        ["git", "add"] + files,
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0 and "ignored" in result.stderr:
+        # Files are gitignored — force-add them so the research commit works
+        logger.info("Files are gitignored, using git add -f")
+        subprocess.run(
+            ["git", "add", "-f"] + files,
+            cwd=cwd,
+            capture_output=True,
+            text=True,
+        )
+    elif result.returncode != 0:
+        logger.warning("git add failed: %s", result.stderr.strip())
+
+
 # ------------------------------------------------------------------
 # Results TSV
 # ------------------------------------------------------------------
@@ -424,7 +445,7 @@ def run_loop(
             current_research = new_research
             best_score = new_score
             output_path.write_text(current_research)
-            _git(["add", output, "results.tsv"], cwd=project_dir)
+            _git_add_research([output, "results.tsv"], cwd=project_dir)
             _git(
                 ["commit", "-m", f"iteration {iteration}: score {new_score}/100 (+{new_score - best_score})"],
                 cwd=project_dir,
