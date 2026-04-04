@@ -151,141 +151,160 @@ Distribution Layer
 - **Vercel + Next.js:** Frontend for member portal
 - **Supabase or PlanetScale:** Backend database for members and fare history
 
-### Error Fare Detection Logic
-1. Establish rolling baseline fare per route/cabin/season using 90-day historical data
-2. Flag fares that deviate >40% below baseline as potential deals
-3. Cross-reference against multiple data sources to confirm the fare is live
-4. Classify: error fare (likely short-lived, book immediately) vs. sale fare (stable, days to book)
-5. Score deal quality: savings %, number of travel dates available, airline reliability
-6. Auto-generate alert copy via LLM with booking instructions and expiry urgency
-
 ---
 
 ## Revenue Model & Pricing Strategy
 
-### Subscription Tiers (Recommended for Business-Class-Only Platform)
+### Subscription Tiers (Recommended)
 
 | Tier | Price | Features |
 |---|---|---|
-| **Free** | $0 | 1–2 deals/month, email only, 7-day delay |
-| **Premium** | $199/year (~$16.58/mo) | All business class deals, instant alerts, all origins |
-| **Elite** | $349/year (~$29/mo) | Premium + first class, concierge booking help, API access |
+| **Free** | $0 | 1–2 deal alerts/month, limited origins |
+| **Premium** | $99/year | Full business class deal alerts, all origins |
+| **Elite** | $249/year | First class included, error fare priority, concierge booking help |
 
-**Rationale:**
-- Going.com charges $199/year for a bolt-on business class tier within an economy product
-- A purpose-built business class platform justifies a higher price point ($199–$349/year)
-- The target customer (premium traveler) has demonstrated willingness to pay for quality information
-- A single deal saving $2,000–$5,000 on a business class ticket makes a $349/year subscription a 10–15x ROI
+### Revenue Streams
+1. **Subscription fees** — primary, recurring, high-margin
+2. **Affiliate commissions** — secondary; airlines and OTAs pay 1–3% on bookings
+3. **Referral partnerships** — credit card affiliate programs (Chase, Amex, Citi) pay $100–$400 per approved card referral
+4. **Sponsored deal placements** — airlines pay for featured deal promotion (must be disclosed)
+5. **API access** — sell fare monitoring data to corporate travel managers or TMCs
 
-### Affiliate Revenue Layer
-- When members click through to book, use tracked affiliate links via:
-  - **Travelpayouts** — aggregates airline affiliate programs
-  - **CJ Affiliate / Rakuten** — major airline programs (Delta, United, BA, etc.)
-  - **Direct airline affiliate programs** — higher commission rates (1–5% of ticket value)
-- Business class ticket average: $3,000–$8,000 → affiliate commission: $60–$400 per booking
-- Even at low click-through rates, affiliate revenue can meaningfully supplement subscription income
-
-### Revenue Model Comparison
+### Affiliate vs. Direct Booking Model Comparison
 
 | Model | Pros | Cons |
 |---|---|---|
-| Subscription only | Predictable MRR, no booking risk | Slower growth, churn risk |
-| Affiliate only | No subscription friction | Unpredictable, algorithm-dependent |
-| Hybrid (subscription + affiliate) | Best of both; aligns incentives | Slightly more complex |
-| Travel agency (like SkyLux) | Higher revenue per transaction | Requires licensing, booking risk, staffing |
+| **Affiliate/referral** | No booking liability, low ops overhead | Lower revenue per booking, dependent on partner programs |
+| **Direct booking (agency)** | Higher margin per transaction | Requires IATA/ARC accreditation, booking liability, customer service burden |
+| **Hybrid** | Balanced risk/reward | More complex to operate |
 
-**Recommendation:** Hybrid model — subscription as primary revenue, affiliate as secondary. Avoid acting as a travel agency in early stages.
+**Recommendation for solo founder:** Start with affiliate model, layer in subscription revenue as primary. Direct booking requires regulatory compliance and operational overhead that is prohibitive at early stage.
 
 ---
 
-## SaaS Conversion Rate Benchmarks for Subscription Platforms
+## Conversion Rate Benchmarks for Freemium Subscription Models
 
-Understanding industry conversion benchmarks is critical for modeling subscriber growth and optimizing the funnel for a business-class flight deal subscription service. [Source](https://www.artisangrowthstrategies.com/blog/saas-conversion-rate-benchmarks-2026-data-1200-companies)
+Understanding conversion rates is critical for financial modeling. The following benchmarks apply to freemium SaaS and subscription products, which are directly analogous to a free-to-paid flight deal subscription.
 
-### Key Funnel Benchmarks (2026 Data, 1,200+ SaaS Companies)
+### Freemium to Paid Conversion Rates (SaaS Benchmarks)
+Based on data gathered from 80+ SaaS companies between 2021–2025 [Source](https://firstpagesage.com/seo-blog/saas-freemium-conversion-rates/):
 
-| Funnel Stage | Bottom 25% | Average | Elite (Top 10%) |
-|---|---|---|---|
-| Visitor-to-Lead | <0.7% | 1.5–2.5% | 8–15% |
-| MQL-to-SQL | <20% | 32–40% | 39–40%+ |
-| SQL-to-Close | <15% | 20–25% | 30%+ |
-
-### Free-to-Paid Conversion Rates by Trial Model
-
-| Trial Model | Average | Top 10% |
+| Freemium Model Type | Visitor to Freemium | Freemium to Paid |
 |---|---|---|
-| Freemium (self-serve) | 3–5% | 6–8% |
-| Free Trial (no credit card) | 4–6% | 10–15% |
-| Free Trial (credit card required) | 25–35% | 50–60% |
-| Median free-to-paid (all models, 2025) | 34% | — |
+| **Traditional Freemium** (free-forever, limited features) | 13.7% | 3.7% |
+| **Land & Expand** (free for individuals, paid for orgs) | 14.5% | 3.0% |
+| **Freeware 2.0** (fully functional, optional add-ons) | 13.2% | 3.3% |
 
-**Key insight:** Opt-out trials (credit card required upfront) convert at **48.8%** on average vs. 18.2% for opt-in trials. For a premium subscription targeting high-income travelers, requiring a credit card at free trial signup is likely appropriate and will significantly improve conversion rates.
+### Free Trial Conversion Rates
+| Trial Model | Visitor to Trial | Trial to Paid |
+|---|---|---|
+| **Opt-In Free Trial** (no payment info required) | 7.8% | 17.8% |
+| **Opt-Out Free Trial** (auto-converts to paid) | 2.4% | 49.9% |
 
-### Trial Duration Impact
-- **7-day trials:** Highest conversion rate at **40.4%**
-- **Trials over 60 days:** Conversion drops to **30.6%**
-- **Recommendation:** Use a 7–14 day free trial with full access to demonstrate deal quality before charging
+### Industry-Specific Freemium to Paid Benchmarks
+Selected industries for comparison [Source](https://firstpagesage.com/seo-blog/saas-freemium-conversion-rates/):
 
-### Marketing Channel Conversion Benchmarks
-- **SEO:** 2.1% visitor-to-lead rate — highest among organic channels
-- **PPC:** 0.7% visitor-to-lead rate
-- **LinkedIn:** Strong ROI with SQL-to-close rates of **39%** — highly relevant for targeting business travelers and corporate accounts
-- **Implication:** For a business-class platform, SEO content (deal alerts, route guides, "best business class to X" articles) and LinkedIn outreach to frequent business travelers are the highest-ROI acquisition channels
+| Industry | Freemium to Paid |
+|---|---|
+| Legal/LegalTech | 5.7% |
+| RegTech | 5.8% |
+| ERP | 4.8% |
+| IoT | 4.1% |
+| Healthcare/MedTech | 4.0% |
+| Financial/Fintech | 3.7% |
+| HR | 3.6% |
+| Advertising/AdTech | 3.6% |
+| Agriculture/AgTech | 4.5% |
+| CRM | 3.4% |
 
-### Application to Business Class Subscription Platform
-- At average conversion rates (1.5–2.5% visitor-to-lead, ~18% free-to-paid for opt-in trial):
-  - 10,000 monthly visitors → 150–250 leads → 27–45 new paid subscribers/month
-- At elite conversion rates (8–15% visitor-to-lead, ~50% free-to-paid with credit card):
-  - 10,000 monthly visitors → 800–1,500 leads → 400–750 new paid subscribers/month
-- **Year 1 target:** 1,000 paid subscribers at $199/year = **$199,000 ARR**
-- **Year 2 target:** 5,000 paid subscribers at blended $220/year = **$1.1M ARR**
-- **Year 3 target:** 20,000 paid subscribers = **$4.4M ARR** (approaching Going.com's estimated revenue with a fraction of the team)
+### B2B SaaS Free Trial Benchmarks (2025)
+- **Median B2B SaaS free trial to paid conversion:** varies significantly by ACV, trial model, and activation rate [Source](https://www.1capture.io/blog/free-trial-conversion-benchmarks-2025)
+- Activation rate (whether a user experiences the core value of the product during trial) is the #1 predictor of conversion
+- Geographic and acquisition channel factors significantly impact trial quality and conversion rates
+
+### Application to Business Class Deal Platform
+
+For a business-class-only subscription platform using a traditional freemium model:
+
+- **Conservative estimate:** 3.0–3.7% of free members convert to paid (industry average)
+- **Optimistic estimate:** 5–8% conversion, given high-intent audience (people actively seeking business class deals have strong purchase motivation)
+- **Key insight:** The target audience (high-income, frequent travelers) likely converts at above-average rates compared to general SaaS benchmarks, as they have both the financial means and clear motivation to pay for premium deal alerts
+
+### Financial Model Example (Year 1–3)
+
+| Metric | Year 1 | Year 2 | Year 3 |
+|---|---|---|---|
+| Free members | 10,000 | 50,000 | 150,000 |
+| Conversion rate (freemium to paid) | 4% | 5% | 6% |
+| Paid subscribers | 400 | 2,500 | 9,000 |
+| Avg. subscription revenue | $149/yr | $149/yr | $149/yr |
+| Subscription revenue | $59,600 | $372,500 | $1,341,000 |
+| Affiliate revenue (est.) | $10,000 | $60,000 | $200,000 |
+| **Total Revenue** | **~$70K** | **~$432K** | **~$1.54M** |
 
 ---
 
-## Go-To-Market Strategy
+## Go-to-Market Strategy
 
 ### Phase 1: Validation (Months 1–3)
-- Launch a free email newsletter with 2–3 business class deals per week
-- Build audience via Reddit (r/churning, r/awardtravel, r/solotravel), Twitter/X, LinkedIn
-- Target: 1,000 free subscribers before charging anything
-- Use Beehiiv or Substack for zero-infrastructure newsletter launch
-- Manually source deals to validate demand before building automation
+- Launch a free email newsletter with manually curated business class deals
+- Target: 1,000 free subscribers via Reddit (r/churning, r/awardtravel, r/solotravel), Twitter/X, and SEO
+- Validate engagement: open rates >40% indicate strong product-market fit
+- No technology investment yet — use Google Flights + manual monitoring
 
 ### Phase 2: Monetization (Months 4–6)
-- Introduce paid tier at $149–$199/year with 14-day free trial (credit card required)
-- Gate best deals (error fares, same-day alerts) behind paywall
-- Target: 200–500 paying subscribers = $30K–$100K ARR
-- Begin building automated fare monitoring infrastructure in parallel
+- Introduce paid tier at $99/year with enhanced features (more origins, faster alerts)
+- Build basic automation: Python scripts monitoring key routes via Kiwi.com Tequila API
+- Target: 100 paid subscribers = $9,900 ARR (proof of concept)
 
 ### Phase 3: Scale (Months 7–18)
-- Launch full AI-powered monitoring platform
-- Add origin airport personalization (members set home airports)
-- Introduce referral program (1 month free per referral)
-- SEO content strategy: "Business class deals from [City]" landing pages
-- Target: 2,000–5,000 paying subscribers
+- Integrate Duffel NDC API for broader fare coverage
+- Build AI anomaly detection layer for automated error fare identification
+- Launch affiliate partnerships with major OTAs and credit card programs
+- Target: 2,500 paid subscribers = ~$250K ARR
 
-### Acquisition Channels (Prioritized)
-1. **SEO** — "cheap business class flights," "business class mistake fares," route-specific pages
-2. **LinkedIn** — target frequent business travelers, corporate travel managers
-3. **Reddit/communities** — r/churning, r/awardtravel, FlyerTalk forums
-4. **Partnerships** — credit card bloggers, points/miles influencers (affiliate deals)
-5. **PR** — pitch "I found a $400 business class to Tokyo" stories to travel media
+### Content & SEO Strategy
+- Target long-tail keywords: "cheap business class flights to Tokyo," "business class mistake fares," "how to fly business class for less"
+- Publish deal case studies: "How we found $800 business class to London" (builds trust and SEO)
+- YouTube/TikTok: short-form video showing real deal alerts drives viral growth
+
+### Distribution Channels
+1. **Email newsletter** — owned audience, highest conversion
+2. **SEO** — long-term organic traffic for deal-seeking queries
+3. **Social media** — Twitter/X and Instagram for deal screenshots (viral potential)
+4. **Podcast sponsorships** — travel and personal finance podcasts reach target demographic
+5. **Referral program** — offer 1 month free for each referred paying subscriber
 
 ---
 
-## Unit Economics & Financial Model
+## Legal & Regulatory Considerations
 
-### Key Metrics to Track
-- **CAC (Customer Acquisition Cost):** Target <$30 for organic, <$80 for paid
-- **LTV (Lifetime Value):** At $199/year with 3-year average retention = $597 LTV
-- **LTV:CAC ratio:** Target >5:1 for sustainable growth
-- **Monthly Churn:** Target <3%/month (36% annual) for subscription travel products
-- **Net Revenue Retention:** Upsell from $199 → $349 Elite tier improves NRR above 100%
+### Fare Display Rules
+- Airlines have strict rules about how fares can be displayed and marketed
+- Must comply with DOT (US) and IATA fare display regulations
+- Cannot guarantee fare availability — must include disclaimers
 
-### Revenue Projections (Conservative)
+### Affiliate Program Compliance
+- FTC requires disclosure of affiliate relationships
+- Some airline affiliate programs prohibit certain marketing tactics (e.g., paid search on brand terms)
 
-| Year | Paid Subscribers | Avg. Revenue/Sub | ARR | Affiliate Revenue | Total Revenue |
-|---|---|---|---|---|---|
-| Year 1 | 1,000 | $199 | $199K | $20K | ~$220K |
-| Year 2 | 5,000 | $210
+### Data & Privacy
+- GDPR compliance required for European members
+- CAN-SPAM compliance for email marketing (US)
+- Member data (travel preferences, origin airports) is sensitive — requires proper data handling
+
+### IATA/ARC Accreditation (If Moving to Direct Booking)
+- Required to issue tickets directly
+- Alternative: partner with an accredited host agency (common for new travel businesses)
+- Host agency fees: typically $50–$200/month plus a percentage of commissions
+
+---
+
+## Key Risks & Mitigations
+
+| Risk | Likelihood | Impact | Mitigation |
+|---|---|---|---|
+| Airlines crack down on error fare publishing | Medium | High | Focus on legitimate sales, not just errors; diversify deal types |
+| GDS/API access revoked | Low | High | Use multiple data sources; build redundancy |
+| Going.com launches competing standalone product | Medium | Medium | Move fast; build brand loyalty before they react |
+| Low
