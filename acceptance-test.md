@@ -42,23 +42,47 @@ NatusAI has developed what they claim to be "the world's first sovereign, AI-nat
 
 ## Technical Architecture
 
+### NatusAI OS Architecture
+
 NatusAI OS is built on a three-layer sovereign technology stack:
 
-### Layer 1: Sovereign Data Layer
+#### Layer 1: Sovereign Data Layer
 - Unified DataOS combining graph, vector, triplestore, timeseries, and full-text search in a single multi-database engine
 - Designed for speed, efficiency, and complete data sovereignty
 
-### Layer 2: Intelligence Orchestration Layer  
+#### Layer 2: Intelligence Orchestration Layer  
 - Manages AI models and builds AI agents
 - Orchestrates multi-agent systems with performance evaluation
 - Provides complete AI lifecycle management
 
-### Layer 3: Applications Layer
+#### Layer 3: Applications Layer
 - Builds, deploys, and manages AI-powered applications
 - Supports development from no-code to full-code approaches
 - Creates custom business applications as needed
 
 [Source](https://www.natusai.com/)
+
+### Azure AI Platform Architecture
+
+Microsoft Azure provides comprehensive AI platform services (PaaS) for building AI workloads with enterprise-grade security and scalability. The Azure AI architecture framework includes:
+
+#### Generative AI Architectures
+- **Baseline Foundry chat reference architecture**: Proven design patterns for production workloads with security configurations, networking designs, and operational practices
+- **AI application landing zone**: Enterprise-grade architecture for AI applications
+- **GenAIOps**: Operational guidance for AI development lifecycle management including model deployment, monitoring, and continuous improvement
+
+#### Nongenerative AI Architectures
+- **Document processing architectures**: Specialized patterns for document analysis and processing
+- **Video and image classification architecture**: Media analysis capabilities
+- **Audio processing architecture**: Speech and audio analysis systems
+- **Predictive analytics architecture**: Data-driven prediction and forecasting systems
+
+#### Key Azure AI Services
+- **Azure Foundry**: Unified platform for building and deploying generative and nongenerative AI applications
+- **Azure OpenAI**: Access to OpenAI models with enterprise security and compliance
+- **Azure Machine Learning**: End-to-end machine learning lifecycle management platform
+
+[Source](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/ai/platform/architectures)
 
 ## Key Benefits for Travel Agencies
 
@@ -89,5 +113,18 @@ Travel agencies considering AI-native operating systems should evaluate:
 3. **Scalability**: Capacity to handle seasonal fluctuations and business growth
 4. **Customization**: Flexibility to adapt to specific travel agency workflows and customer service requirements
 5. **Training and Adoption**: Change management support for staff transitioning from traditional software tools
+6. **AI Readiness Assessment**: Evaluating current data infrastructure and security posture before AI deployment, similar to Microsoft Copilot readiness assessments [Source](https://cloudiway.com/)
+
+## Architecture Design Considerations
+
+When implementing AI-native systems for travel agencies, organizations should consider Azure's Well-Architected Framework design areas:
+
+- **Application Design**: Structuring AI applications for travel-specific workflows
+- **Data Platform**: Managing customer, booking, and operational data effectively
+- **MLOps and GenAIOps**: Establishing practices for model lifecycle management
+- **Security**: Implementing enterprise-grade security controls for sensitive travel data
+- **Responsible AI**: Ensuring ethical AI practices in customer interactions and decision-making
+
+[Source](https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/scenarios/ai/platform/architectures)
 
 The travel industry's reliance on multiple software systems for reservations, customer management, accounting, and supplier relationships makes it a prime candidate for AI-native consolidation platforms that can provide unified intelligence across all business operations.
