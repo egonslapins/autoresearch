@@ -47,6 +47,52 @@ Under Directive 2014/33/EU, lifts and their safety components must meet **essent
 
 ---
 
+## Harmonised Standards: The EN 81 Series
+
+A critical component of demonstrating compliance with Directive 2014/33/EU is adherence to the relevant **harmonised European standards**, most notably the **EN 81 series**, which is regulated by **CEN (the European Committee for Standardisation)**. Compliance with these harmonised standards provides a presumption of conformity with the corresponding essential health and safety requirements of the Directive.
+
+### EN 81-20: Safety Rules for the Construction and Installation of Lifts
+
+**EN 81-20** is the primary standard governing the **safety rules for the construction and installation of lifts** used for the transport of persons and goods. It replaced the earlier **EN 81-1** (electric lifts) and **EN 81-2** (hydraulic lifts) standards, consolidating requirements into a single, updated framework. [Source](https://deltronlifts.co.uk/understanding-lift-standards-en81-20-en81-50/)
+
+Key areas covered by EN 81-20 include:
+- Requirements for the **lift well, machine room, and pulley room**
+- **Car and counterweight** specifications
+- **Suspension and safety gear** requirements
+- **Doors and gates** — including landing and car door specifications
+- **Electrical installations and safety devices**
+- **Emergency operations** and rescue procedures
+- Enhanced requirements for **protection against vandalism and misuse**
+- Improved provisions for **accessibility**, including minimum car dimensions
+
+### EN 81-50: Rules for the Design, Calculation, Examination and Testing of Lift Components
+
+**EN 81-50** is the companion standard to EN 81-20 and covers the **design, calculation, examination, and testing of lift components**. It replaced the calculation and testing annexes previously found in EN 81-1 and EN 81-2. [Source](https://deltronlifts.co.uk/understanding-lift-standards-en81-20-en81-50/) [Source](https://www.newlift.co.uk/wp-content/uploads/2025/06/new-lift-standards-en-81-20-en-81-50-v2.pdf)
+
+Key areas covered by EN 81-50 include:
+- **Structural calculations** for lift components (e.g., buffers, safety gears, overspeed governors)
+- **Type examination and testing** requirements for safety components
+- **Load and stress calculations** for ropes, chains, and suspension elements
+- Requirements for **Notified Body testing** of safety-critical components
+
+### Main Changes Introduced by EN 81-20 and EN 81-50
+
+The transition to EN 81-20 and EN 81-50 introduced several significant changes compared to the predecessor standards: [Source](https://www.newlift.co.uk/wp-content/uploads/2025/06/new-lift-standards-en-81-20-en-81-50-v2.pdf)
+
+- **Increased minimum pit depth and headroom** requirements to improve maintenance safety
+- **Stricter requirements for car enclosures** and structural integrity
+- **Enhanced fire resistance** requirements for lift shaft components
+- **Improved protection** for persons working in the lift well and machine room
+- **Updated electrical safety** requirements aligned with current IEC standards
+- **Clearer requirements for remote monitoring** and communication systems
+- More detailed provisions for **earthquake resistance** in applicable regions
+
+### Relationship Between EN 81-20/50 and Directive 2014/33/EU
+
+EN 81-20 and EN 81-50 are the **primary harmonised standards** referenced under Directive 2014/33/EU for new lift installations. Compliance with these standards provides a **presumption of conformity** with the Directive's essential health and safety requirements, significantly streamlining the conformity assessment process. All new lifts installed in the EU are expected to comply with these standards.
+
+---
+
 ## Conformity Assessment and CE Marking
 
 To demonstrate compliance with Directive 2014/33/EU, manufacturers and installers must undergo **conformity assessment procedures**, which typically involve:
@@ -88,12 +134,14 @@ A central goal of the Directive is to eliminate barriers to trade by ensuring th
 Based on the current regulatory framework, the following best practices are recommended for organizations seeking elevator compliance in the EU in 2026:
 
 1. **Stay current with Directive 2014/33/EU requirements** — Ensure all lifts and safety components meet the essential health and safety requirements defined in the Directive.
-2. **Engage accredited Notified Bodies early** — For complex installations or new safety components, engage a Notified Body at the design stage to streamline conformity assessment.
-3. **Maintain comprehensive technical documentation** — Keep up-to-date records of design, manufacturing, installation, and testing processes to support conformity assessment and market surveillance inspections.
-4. **Conduct thorough hazard assessments** — Both manufacturers of safety components and installers must systematically identify and mitigate all relevant hazards.
-5. **Monitor national transpositions** — While the Directive harmonises requirements EU-wide, Member States may have additional national regulations (e.g., for existing lifts, periodic inspections). Verify local requirements in each country of operation.
-6. **Plan for periodic inspections** — Many EU Member States require regular in-service inspections of lifts by competent bodies. Establish maintenance and inspection schedules accordingly.
-7. **Track regulatory updates** — Monitor the European Commission and EU-OSHA for any amendments, guidance documents, or new standards related to Directive 2014/33/EU that may affect compliance obligations by 2026.
+2. **Design and install to EN 81-20 and EN 81-50** — All new lift installations should comply with EN 81-20 (construction and installation) and EN 81-50 (design, calculation, and testing of components), the primary harmonised standards under the Directive. Compliance with these standards provides a presumption of conformity with the Directive's EHSRs. [Source](https://deltronlifts.co.uk/understanding-lift-standards-en81-20-en81-50/)
+3. **Engage accredited Notified Bodies early** — For complex installations or new safety components requiring type examination under EN 81-50, engage a Notified Body at the design stage to streamline conformity assessment.
+4. **Maintain comprehensive technical documentation** — Keep up-to-date records of design, manufacturing, installation, and testing processes to support conformity assessment and market surveillance inspections.
+5. **Conduct thorough hazard assessments** — Both manufacturers of safety components and installers must systematically identify and mitigate all relevant hazards, as required by the Directive and supported by the EN 81 series.
+6. **Account for EN 81-20 enhanced requirements** — Pay particular attention to the updated requirements introduced by EN 81-20, including increased pit depth and headroom, enhanced car enclosure integrity, improved fire resistance, and updated electrical safety provisions. [Source](https://www.newlift.co.uk/wp-content/uploads/2025/06/new-lift-standards-en-81-20-en-81-50-v2.pdf)
+7. **Monitor national transpositions** — While the Directive harmonises requirements EU-wide, Member States may have additional national regulations (e.g., for existing lifts, periodic inspections). Verify local requirements in each country of operation.
+8. **Plan for periodic inspections** — Many EU Member States require regular in-service inspections of lifts by competent bodies. Establish maintenance and inspection schedules accordingly.
+9. **Track regulatory updates** — Monitor the European Commission, CEN, and EU-OSHA for any amendments, guidance documents, or new or revised EN 81 series standards that may affect compliance obligations by 2026.
 
 ---
 
@@ -101,14 +149,15 @@ Based on the current regulatory framework, the following best practices are reco
 
 The following areas require additional investigation to complete this report:
 
-- Specific **harmonised standards (EN standards)** referenced under Directive 2014/33/EU (e.g., EN 81 series)
+- **Other EN 81 series standards** beyond EN 81-20 and EN 81-50 (e.g., EN 81-21 for new lifts in existing buildings, EN 81-28 for remote alarms, EN 81-70 for accessibility, EN 81-72 for firefighters' lifts, EN 81-73 for behaviour in fire)
 - **National implementing regulations** in key Member States (Germany, France, Italy, Spain, etc.)
 - **Periodic inspection requirements** and intervals across EU Member States
 - Any **proposed amendments or new legislation** affecting elevator compliance post-2024
-- **Accessibility requirements** for lifts under EU disability and accessibility legislation (e.g., European Accessibility Act)
+- **Accessibility requirements** for lifts under EU disability and accessibility legislation (e.g., European Accessibility Act) and the specific EN 81-70 standard
 - **Energy efficiency requirements** for lifts under EU Green Deal initiatives
-- **Digital and IoT compliance considerations** for smart elevator systems
+- **Digital and IoT compliance considerations** for smart elevator systems, including remote monitoring requirements referenced in EN 81-20
+- **Modernisation requirements** for existing lifts that predate EN 81-20/50 and may not meet current standards
 
 ---
 
-*Document last updated: Based on search findings current as of October 2023 (EU-OSHA source). Further updates recommended as 2026 approaches.*
+*Document last updated: Incorporating search findings current as of June 2025 (newlift.co.uk source). Further updates recommended as 2026 approaches.*
