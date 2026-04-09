@@ -1,170 +1,446 @@
-# EU Elevator Compliance Best Practices 2026: A Research Report
+# Claude Managed Agents — Deep Research
 
-## Overview
+> Autoresearch | 3 iterations | Score: 75/100 | 2026-04-09
 
-This report synthesizes current knowledge on elevator (lift) compliance requirements and best practices within the European Union, with a focus on regulatory frameworks relevant to 2026 and beyond. Where relevant, international standards are referenced for comparative context.
+## Executive Summary
 
----
-
-## Core Regulatory Framework: Directive 2014/33/EU
-
-The primary legislative instrument governing elevator compliance in the EU is **Directive 2014/33/EU of the European Parliament and of the Council**, adopted on **26 February 2014**. It concerns the harmonisation of the laws of Member States relating to lifts and safety components for lifts (recast). Published in the **Official Journal of the European Union L 96, 29.3.2014, pp. 251–308**, it applies across all official EU languages and is in force with EEA relevance. [Source](https://osha.europa.eu/en/legislation/directive/directive-201433eu-lifts-and-safety-components-lifts-recast) [Source](https://eur-lex.europa.eu/eli/dir/2014/33/oj)
-
-This Directive replaced its predecessor, **Directive 95/16/EC** (of 29 June 1995 on the approximation of the laws of the Member States relating to lifts), which was repealed as of **20 April 2016**. The recast was undertaken in the interests of clarity, as Directive 95/16/EC had been substantially amended prior to replacement.
-
-### Legal Basis and Framework
-
-The Directive was adopted with regard to the **Treaty on the Functioning of the European Union**, in particular **Article 114** thereof, and was enacted following the ordinary legislative procedure. It is aligned with two key horizontal instruments:
-
-- **Regulation (EC) No 765/2008** (9 July 2008) — sets out requirements for accreditation and market surveillance relating to the marketing of products, provides a framework for market surveillance and controls on products from third countries, and lays down the general principles of CE marking.
-- **Decision No 768/2008/EC** (9 July 2008) — establishes a common framework for the marketing of products, laying down common principles and reference provisions intended to apply across sectoral legislation to provide a coherent basis for revision or recasts of that legislation. Directive 95/16/EC was adapted to this Decision as part of the recast process. [Source](https://eur-lex.europa.eu/eli/dir/2014/33/oj)
-
-### Scope
-
-The Directive applies to:
-- **Lifts installed in buildings and constructions**
-- **Safety components** used in such lifts
-
-An important clarification in the Directive is that lifts covered by it **only come into existence as finished products once they have been permanently installed in buildings or constructions**. Consequently, lifts cannot be imported into the Union in the traditional sense — they are only **placed on the market** and not subsequently made available as standalone products. [Source](https://eur-lex.europa.eu/eli/dir/2014/33/oj)
-
-### Key Objectives
-
-- Ensure the **free circulation (trade) of lifts** in the EU internal market
-- Fully harmonise **essential health and safety requirements** that lifts and their safety components must comply with
-- Establish **conformity assessment procedures** for lifts and safety components
-
-### Responsibilities Defined
-
-The Directive clearly defines the responsibilities of the following economic operators:
-- **Manufacturers** of safety components
-- **Importers**
-- **Distributors**
-- **Installers** of lifts
-
-Manufacturers of safety components and installers of lifts are obliged to **assess all hazards** associated with their products or installations as part of the conformity process.
+Claude Managed Agents is Anthropic's fully hosted platform for building and deploying autonomous AI agents, launched in **public beta on April 8, 2026**. It provides managed infrastructure — containers, tool execution, error recovery, session persistence — so developers define agent logic while Anthropic handles operations. Pricing is straightforward: standard Claude API token rates plus **$0.08 per session-hour** of active runtime. For a travel agency CEO already using Claude Code, Managed Agents represents the natural next step toward automating multi-step business processes like customer support, document processing, and data analysis without building custom infrastructure.
 
 ---
 
-## Essential Safety Requirements
+## 1. What Are Claude Managed Agents?
 
-Under Directive 2014/33/EU, lifts and their safety components must meet **essential health and safety requirements (EHSRs)** before being placed on the market or put into service. These requirements cover:
+Claude Managed Agents is a **pre-built, configurable agent harness** that runs in Anthropic's managed cloud infrastructure. Instead of building your own agent loop, tool execution layer, and runtime environment, you get a fully managed system where Claude can autonomously:
 
-- Structural integrity and load-bearing capacity
-- Safe operation under normal and emergency conditions
-- Protection against mechanical, electrical, and other hazards
-- Accessibility and usability considerations
+- Read and write files
+- Run shell commands (bash)
+- Browse the web and fetch content
+- Execute code in sandboxed containers
+- Connect to external services via MCP (Model Context Protocol) servers
 
----
+**Key distinction from the Messages API:** The Messages API gives you direct model prompting for custom agent loops. Managed Agents gives you a complete runtime — you send a task, and Claude autonomously decides which tools to use, executes them, handles errors, and streams results back. [Source: Claude API Docs](https://platform.claude.com/docs/en/managed-agents/overview)
 
-## Official Harmonised Standards: Commission Implementing Decision (EU) 2021/76
-
-The formal publication of harmonised standards for lifts and safety components under Directive 2014/33/EU is governed by **Commission Implementing Decision (EU) 2021/76** of **26 January 2021**, published in the Official Journal of the European Union (OJ L 027, 27.1.2021, p. 20). This Decision replaced the earlier Communication 2016/C 293/64 (which continued to apply until **27 July 2022** in respect of transitional standards listed in its Annex II). [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
-
-The Decision has been amended multiple times to keep the harmonised standards list current:
-
-| Amendment | Date | Official Journal |
-|---|---|---|
-| Commission Implementing Decision (EU) 2021/1220 | 26 July 2021 | L 267, 27.7.2021, p. 17 |
-| Commission Implementing Decision (EU) 2022/1199 | 11 July 2022 | L 185, 12.7.2022, p. 133 |
-| Commission Implementing Decision (EU) 2023/1646 | 17 August 2023 | L 206, 21.8.2023, p. 70 |
-
-The consolidated text (as of **21 February 2025**) is available on EUR-Lex and serves as the authoritative reference for practitioners identifying which standards currently provide a presumption of conformity under the Directive. [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
-
-### Currently Listed Harmonised Standards under Directive 2014/33/EU
-
-The following standards are listed in Annex I of Commission Implementing Decision (EU) 2021/76 (as consolidated to 21 February 2025) and provide a **presumption of conformity** with Directive 2014/33/EU: [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
-
-| No. | Standard Reference | Title |
-|---|---|---|
-| 1 | **EN 81-20:2020** | Safety rules for the construction and installation of lifts – Part 20: Passenger and goods passenger lifts |
-| 2a | **EN 81-21:2022** | Safety rules for the construction and installation of lifts – Part 21: New passenger and goods passenger lifts in existing buildings |
-| 3a | **EN 81-22:2021** | Safety rules for the construction and installation of lifts – Part 22: Passenger and goods passenger lifts with inclined travel path |
-| 4a | **EN 81-28:2022** | Safety rules for the construction and installation of lifts – Part 28: Remote alarm on passenger and goods passenger lifts |
-| 5 | **EN 81-50:2020** | Safety rules for the construction and installation of lifts – Part 50: Design rules, calculations, examinations and tests of lift components |
-| 6a | **EN 81-58:2022** | Safety rules for the construction and installation of lifts – Part 58: Landing doors fire resistance test |
-| 7a | **EN 81-70:2021+A1:2022** | Safety rules for the construction and installation of lifts – Part 70: Accessibility to lifts for persons including persons with disability |
-| 8 | **EN 81-71:2005+A1:2006** | Safety rules for the construction and installation of lifts – Part 71: Vandal resistant lifts |
-| 9a | **EN 81-72:2020** | Safety rules for the construction and installation of lifts – Part 72: Firefighters lifts |
-| 10a | **EN 81-73:2020** | Safety rules for the construction and installation of lifts – Part 73: Behaviour of lifts in the event of fire |
-| 11a | **EN 81-77:2022** | Safety rules for the construction and installation of lifts – Part 77: Lifts subject to seismic conditions |
-| 12 | **EN 12016:2013** | Electromagnetic compatibility – Product family standard for lifts, escalators and moving walks – Immunity |
-| 15 | **EN 13015:2001+A1:2008** | Maintenance for lifts and escalators – Rules for maintenance instructions |
-
-> **Note:** Standards marked with suffixes (e.g., "2a", "3a") reflect updated references introduced by subsequent amending Decisions. The earlier 2014 editions of EN 81-20 and EN 81-50 (listed in Annex II of the original Decision) ceased to provide presumption of conformity after **27 July 2022**.
+The offering was announced with significant industry interest — within two hours of the announcement, it had reportedly received 2 million views. Early adopters include **Notion, Rakuten, Asana, Sentry, and Vibecode**. [Source: FindSkill.ai](https://findskill.ai/blog/claude-managed-agents-explained/)
 
 ---
 
-## Harmonised Standards: The EN 81 Series
+## 2. Architecture — How It Works
 
-A critical component of demonstrating compliance with Directive 2014/33/EU is adherence to the relevant **harmonised European standards**, most notably the **EN 81 series**, which is regulated by **CEN (the European Committee for Standardisation)** via its technical committee **CEN/TC 10**. Compliance with these harmonised standards provides a presumption of conformity with the corresponding essential health and safety requirements of the Directive.
+### The Brain/Hands/Session Model
 
-As of 2026, the EN 81 series — particularly EN 81-20 — is widely recognised as the **"common language" across borders** for core elevator safety provisions, and is applied beyond the EU in regions that follow European practice. [Source](https://moen.nidec.com/elevators/News-and-Events/Blog/Articles/2026/02/27/Elevator-Safety-Regulations-2026)
+Anthropic's architecture decouples three components, inspired by operating system design: [Source: Anthropic Engineering Blog](https://www.anthropic.com/engineering/managed-agents)
 
-### EN 81-20: Safety Rules for the Construction and Installation of Lifts
+| Component | Role | Key Property |
+|-----------|------|--------------|
+| **Brain** | Claude model + harness — reasoning and tool orchestration | Stateless, horizontally scalable |
+| **Hands** | Disposable Linux containers — execute code/commands | Stateless, replaceable on failure |
+| **Session** | Durable event log — tracks all tool calls, results, decisions | Persistent, external to both brain and hands |
 
-**EN 81-20** is the primary standard governing the **safety rules for the construction and installation of lifts** used for the transport of persons and goods. It replaced the earlier **EN 81-1** (electric lifts) and **EN 81-2** (hydraulic lifts) standards, consolidating requirements into a single, updated framework. The current harmonised version is **EN 81-20:2020**. [Source](https://deltronlifts.co.uk/understanding-lift-standards-en81-20-en81-50/) [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+This separation means:
+- **Container failures don't lose data** — the session log exists independently, so a new container spins up and resumes from the last event
+- **Harness crashes recover automatically** — a new brain instance calls `wake(sessionId)`, retrieves event history, and continues
+- **Multiple brains can run concurrently** — enabling multi-agent scenarios
 
-Key areas covered by EN 81-20 include:
-- Requirements for the **lift well, machine room, and pulley room**
-- **Car and counterweight** specifications
-- **Suspension and safety gear** requirements
-- **Doors and gates** — including landing and car door specifications
-- **Electrical installations and safety devices**
-- **Emergency operations** and rescue procedures
-- Enhanced requirements for **protection against vandalism and misuse**
-- Improved provisions for **accessibility**, including minimum car dimensions
-- **Rigorous lifecycle and simulation expectations** used widely beyond the EU [Source](https://moen.nidec.com/elevators/News-and-Events/Blog/Articles/2026/02/27/Elevator-Safety-Regulations-2026)
+The tool interface is deliberately simple: `execute(name, input) -> string`. Any tool, MCP server, or sandbox uses this same interface. [Source: Anthropic Engineering Blog](https://www.anthropic.com/engineering/managed-agents)
 
-### EN 81-50: Rules for the Design, Calculation, Examination and Testing of Lift Components
+### Four Core Concepts
 
-**EN 81-50** is the companion standard to EN 81-20 and covers the **design, calculation, examination, and testing of lift components**. It replaced the calculation and testing annexes previously found in EN 81-1 and EN 81-2. The current harmonised version is **EN 81-50:2020**. [Source](https://deltronlifts.co.uk/understanding-lift-standards-en81-20-en81-50/) [Source](https://www.newlift.co.uk/wp-content/uploads/2025/06/new-lift-standards-en-81-20-en-81-50-v2.pdf) [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+| Concept | Description |
+|---------|-------------|
+| **Agent** | Model + system prompt + tools + MCP servers + skills. Created once, referenced by ID |
+| **Environment** | Container template — packages, network access rules, mounted files |
+| **Session** | Running agent instance within an environment, performing a specific task |
+| **Events** | Messages between your app and the agent (user turns, tool results, status updates) |
 
-Key areas covered by EN 81-50 include:
-- **Structural calculations** for lift components (e.g., buffers, safety gears, overspeed governors)
-- **Type examination and testing** requirements for safety components
-- **Load and stress calculations** for ropes, chains, and suspension elements
-- Requirements for **Notified Body testing** of safety-critical components
+### Execution Flow
 
-### Main Changes Introduced by EN 81-20 and EN 81-50
+1. You **create an agent** (define model, system prompt, tools)
+2. You **create an environment** (configure container: packages, network rules)
+3. You **start a session** (references agent + environment)
+4. You **send events** (user messages) and **stream responses** via SSE (server-sent events)
+5. Claude **autonomously executes tools** — file writes, bash commands, web searches
+6. Session goes **idle** when the task is complete
+7. You can **steer or interrupt** mid-execution by sending additional events
 
-The transition to EN 81-20 and EN 81-50 introduced several significant changes compared to the predecessor standards: [Source](https://www.newlift.co.uk/wp-content/uploads/2025/06/new-lift-standards-en-81-20-en-81-50-v2.pdf)
+[Source: Claude Managed Agents Quickstart](https://platform.claude.com/docs/en/managed-agents/quickstart)
 
-- **Increased minimum pit depth and headroom** requirements to improve maintenance safety
-- **Stricter requirements for car enclosures** and structural integrity
-- **Enhanced fire resistance** requirements for lift shaft components
-- **Improved protection** for persons working in the lift well and machine room
-- **Updated electrical safety** requirements aligned with current IEC standards
-- **Clearer requirements for remote monitoring** and communication systems
-- More detailed provisions for **earthquake resistance** in applicable regions
+### Performance Gains
 
-### EN 81-21:2022 — Lifts in Existing Buildings
+The decoupled architecture delivered significant performance improvements: [Source: Anthropic Engineering Blog](https://www.anthropic.com/engineering/managed-agents)
 
-**EN 81-21:2022** addresses the specific challenges of installing **new passenger and goods passenger lifts in existing buildings**, where full compliance with EN 81-20 may not be achievable due to structural constraints. This standard provides alternative solutions and compensatory measures for such installations and is listed as a harmonised standard under Directive 2014/33/EU (introduced via the 2023 amending Decision). [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+- **~60% reduction in p50 latency** (time-to-first-token)
+- **Over 90% improvement in p95 latency**
+- Sessions no longer wait for container setup before inference begins
 
-### EN 81-28:2022 — Remote Alarm Systems
+### Security Architecture
 
-**EN 81-28:2022** covers **remote alarm systems on passenger and goods passenger lifts**, setting out requirements for two-way communication between trapped passengers and a rescue service. This updated version (replacing EN 81-28:2003) reflects modern telecommunications infrastructure and is now listed as a harmonised standard under Directive 2014/33/EU. [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+Credentials are structurally separated from sandboxes where Claude-generated code executes:
 
-### EN 81-58:2022 — Landing Door Fire Resistance
+- **Resource-bundled auth:** Repository tokens initialize sandbox git configurations; push/pull work without exposing credentials to the agent
+- **External vault pattern:** OAuth tokens reside in secure vaults; Claude calls MCP tools via a proxy that fetches credentials and forwards them to external services
 
-**EN 81-58:2022** specifies the **fire resistance test for landing doors**, an important safety requirement in multi-storey buildings. The 2022 edition is the current harmonised version under Directive 2014/33/EU. [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+[Source: Anthropic Engineering Blog](https://www.anthropic.com/engineering/managed-agents)
 
-### EN 81-70:2021+A1:2022 — Accessibility
+---
 
-**EN 81-70:2021+A1:2022** covers **accessibility to lifts for persons including persons with disability**. This standard sets out minimum requirements for lift car dimensions, door widths, control panel heights, and other features to ensure lifts are usable by people with reduced mobility, visual impairments, or other disabilities. The 2021 edition with its 2022 amendment is the current harmonised version. [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+## 3. Available Tools and Capabilities
 
-### EN 81-72:2020 and EN 81-73:2020 — Fire-Related Standards
+### Built-in Tools (agent_toolset_20260401)
 
-- **EN 81-72:2020** covers **firefighters' lifts** — lifts specifically designed and equipped for use by fire services during an emergency.
-- **EN 81-73:2020** covers the **behaviour of lifts in the event of fire**, specifying how lifts should respond (e.g., returning to a designated floor and opening doors) when a fire alarm is triggered.
+| Tool | Capability |
+|------|-----------|
+| **Bash** | Run shell commands in the container |
+| **Read/Write/Edit** | File operations in the container |
+| **Glob/Grep** | File search and pattern matching |
+| **Web Search** | Search the web (Google-quality results) |
+| **Web Fetch** | Retrieve and process content from URLs |
+| **MCP Servers** | Connect to external tool providers (Notion, HubSpot, Slack, databases, etc.) |
 
-Both are harmonised standards under Directive 2014/33/EU. [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+### MCP Server Integration
 
-### EN 81-77:2022 — Seismic Conditions
+MCP (Model Context Protocol) is Anthropic's open standard for connecting AI agents to external tools and data sources. Through MCP servers, Managed Agents can integrate with:
 
-**EN 81-77:2022** provides requirements for **lifts subject to seismic conditions**, applicable in earthquake-prone regions of the EU (such as parts of Italy, Greece, Romania, and Portugal). The 2022 edition is the current harmonised version. [Source](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:02021D0076-20250221)
+- CRM systems (HubSpot, Salesforce)
+- Productivity tools (Notion, Asana, Slack)
+- Databases and data warehouses
+- Email systems
+- Custom internal APIs
+- Version control (GitHub, GitLab)
 
-### EN 13
+### Advanced Features (Research Preview)
+
+These features require separate access approval: [Source: Claude API Docs](https://platform.claude.com/docs/en/managed-agents/overview)
+
+| Feature | Status | Description |
+|---------|--------|-------------|
+| **Multi-agent** | Research preview | Agents can spawn other agents, coordinate parallel tasks |
+| **Memory** | Research preview | Persistent memory across sessions |
+| **Outcomes** | Research preview | Define and evaluate success criteria for agent tasks |
+
+---
+
+## 4. Pricing Model
+
+### Two Billing Dimensions
+
+Claude Managed Agents bills on **tokens + session runtime**: [Source: Claude API Pricing](https://platform.claude.com/docs/en/about-claude/pricing)
+
+#### Token Costs (standard Claude API rates)
+
+| Model | Input | Output |
+|-------|-------|--------|
+| Claude Sonnet 4.6 (recommended) | $3/MTok | $15/MTok |
+| Claude Opus 4.6 (most capable) | $5/MTok | $25/MTok |
+| Claude Haiku 4.5 (cheapest) | $1/MTok | $5/MTok |
+
+#### Session Runtime
+
+| SKU | Rate | Metering |
+|-----|------|----------|
+| Session runtime | **$0.08 per session-hour** | Only while status is `running` |
+
+**Important:** Idle time is free. If the agent is waiting for your next message, waiting for tool confirmation, or in a queue — no runtime charge.
+
+#### Additional Costs
+
+- **Web search:** $10 per 1,000 searches
+- **Web fetch:** No additional cost (just token costs for fetched content)
+
+#### What Does NOT Apply to Managed Agents
+
+| Modifier | Why |
+|----------|-----|
+| Batch API discount | Sessions are stateful/interactive, no batch mode |
+| Fast mode premium | Inference speed managed by runtime |
+| Data residency multiplier | Not applicable |
+| Third-party platform pricing | Only available through Claude API directly |
+
+### Worked Example
+
+A one-hour coding session using Claude Opus 4.6 (50K input tokens, 15K output tokens):
+
+| Line item | Cost |
+|-----------|------|
+| Input tokens (50K x $5/MTok) | $0.25 |
+| Output tokens (15K x $25/MTok) | $0.375 |
+| Session runtime (1 hour x $0.08) | $0.08 |
+| **Total** | **$0.705** |
+
+### Cost Estimation for Business Use
+
+- **Customer support agent** running 20 minutes per ticket: ~$0.03 runtime + $0.10-0.50 tokens = **~$0.13-0.53 per ticket**
+- **Always-on agent** (24/7): ~$58/month in runtime alone + token costs
+- **10,000 support tickets** (~3,700 tokens each, Opus 4.6): ~$37 total
+
+[Source: Claude API Pricing](https://platform.claude.com/docs/en/about-claude/pricing) [Source: FindSkill.ai](https://findskill.ai/blog/claude-managed-agents-explained/)
+
+---
+
+## 5. How to Set Up — Quickstart
+
+### Prerequisites
+- Anthropic Console account
+- API key
+- Beta header: `managed-agents-2026-04-01` (SDK sets this automatically)
+
+### Install
+
+```bash
+# CLI (macOS)
+brew install anthropics/tap/ant
+
+# Python SDK
+pip install anthropic
+
+# TypeScript SDK
+npm install @anthropic-ai/sdk
+```
+
+### Step-by-Step (Python)
+
+```python
+from anthropic import Anthropic
+
+client = Anthropic()
+
+# 1. Create an agent (do once, reuse by ID)
+agent = client.beta.agents.create(
+    name="Travel Assistant",
+    model="claude-sonnet-4-6",
+    system="You are a travel agency assistant. Help with bookings, itineraries, and customer inquiries.",
+    tools=[{"type": "agent_toolset_20260401"}],
+)
+
+# 2. Create an environment (container config)
+environment = client.beta.environments.create(
+    name="travel-env",
+    config={"type": "cloud", "networking": {"type": "unrestricted"}},
+)
+
+# 3. Start a session
+session = client.beta.sessions.create(
+    agent=agent.id,
+    environment_id=environment.id,
+    title="Customer inquiry processing",
+)
+
+# 4. Send message and stream response
+with client.beta.sessions.events.stream(session.id) as stream:
+    client.beta.sessions.events.send(
+        session.id,
+        events=[{
+            "type": "user.message",
+            "content": [{"type": "text", "text": "Process the customer inquiry in inbox.csv"}],
+        }],
+    )
+    for event in stream:
+        match event.type:
+            case "agent.message":
+                for block in event.content:
+                    print(block.text, end="")
+            case "agent.tool_use":
+                print(f"\n[Using tool: {event.name}]")
+            case "session.status_idle":
+                print("\n\nAgent finished.")
+                break
+```
+
+SDKs are available in **Python, TypeScript, Go, Java, C#, Ruby, and PHP**. The CLI tool (`ant`) also supports all operations.
+
+[Source: Claude Managed Agents Quickstart](https://platform.claude.com/docs/en/managed-agents/quickstart)
+
+### Rate Limits
+
+| Operation | Limit |
+|-----------|-------|
+| Create endpoints (agents, sessions, environments) | 60 requests/minute |
+| Read endpoints (retrieve, list, stream) | 600 requests/minute |
+
+Organization-level spend limits and tier-based rate limits also apply.
+
+---
+
+## 6. Use Cases — What Can They Do Autonomously?
+
+### Proven Enterprise Use Cases (Early Adopters)
+
+| Company | Use Case | Result |
+|---------|----------|--------|
+| **Notion** | Parallel task delegation across workspaces | Production deployment |
+| **Rakuten** | Enterprise agents for sales, marketing, finance in Slack/Teams | Up and running within one week |
+| **Asana** | AI teammate handling routine project workflows | Production deployment |
+| **Sentry** | Bug detection to pull request automation | End-to-end debugging pipeline |
+| **Vibecode** | Infrastructure setup automation | 10x faster setup reported |
+
+[Source: SiliconANGLE](https://siliconangle.com/2026/04/08/anthropic-launches-claude-managed-agents-speed-ai-agent-development/) [Source: FindSkill.ai](https://findskill.ai/blog/claude-managed-agents-explained/)
+
+### General Workflow Categories
+
+1. **Coding agents** — read codebases, create fix plans, generate pull requests
+2. **Productivity agents** — join projects, take on tasks, coordinate with team
+3. **Financial/legal agents** — process documents, extract information, generate reports
+4. **Customer support** — handle inquiries, look up information, route complex cases
+5. **Data analysis** — process datasets, generate visualizations, produce reports
+
+### Travel Agency Specific Opportunities
+
+Based on the capabilities and the current state of agentic AI in travel:
+
+| Process | What the Agent Could Do | Complexity |
+|---------|------------------------|------------|
+| **Customer email triage** | Read emails, categorize by urgency/type, draft responses, route to specialists | Low — good starting point |
+| **Itinerary generation** | Research destinations, compile multi-day itineraries with pricing from web sources | Medium |
+| **Document processing** | Extract data from booking confirmations, invoices, visa applications | Medium |
+| **Competitive pricing research** | Regularly search competitor prices and compile comparison reports | Medium |
+| **Booking data analysis** | Analyze booking patterns, generate revenue reports, identify trends | Medium |
+| **Customer support chatbot** | Handle FAQs, booking status inquiries, modification requests | Medium-High |
+| **Autonomous booking** | End-to-end booking execution via API integrations | High — needs MCP servers + careful guardrails |
+
+**Industry context:** Sabre, PayPal, and MindTrip are launching the travel industry's first end-to-end agentic booking pipeline in Q2 2026, covering 420+ airlines and 2M hotel properties. IDC predicts that by 2030, up to 30% of travel bookings may be executed by AI agents. However, only 2% of travelers currently trust AI to book autonomously — graduated autonomy (suggest first, act later) is recommended. [Source: OAG](https://www.oag.com/blog/march-2026-the-month-agentic-travel-gets-real) [Source: Travel and Tour World](https://www.travelandtourworld.com/news/article/2026-travel-revolution-how-agentic-ai-is-set-to-completely-transform-the-way-you-book-flights-hotels-and-vacations-autonomous-ai-will-handle-it-all/)
+
+---
+
+## 7. Limitations and Current Status
+
+### Status: Public Beta
+
+- **Launched:** April 8, 2026
+- **Beta header required:** `managed-agents-2026-04-01`
+- **Access:** Enabled by default for all API accounts
+- **Advanced features** (multi-agent, memory, outcomes): Research preview, require separate access request
+
+### Known Limitations
+
+| Limitation | Impact | Mitigation |
+|-----------|--------|------------|
+| **Claude-only** | Cannot use GPT, Gemini, or open-source models | Choose Claude for tasks where it excels; use other providers separately for other tasks |
+| **Vendor lock-in** | Switching providers after building on Managed Agents is non-trivial | Design agent logic to be portable where possible; keep business logic in your code |
+| **Beta reliability** | Production reliability at scale is unproven | Start with non-critical workflows; have human-in-the-loop fallbacks |
+| **No batch mode** | Cannot process large batches asynchronously at discount rates | Use Messages API Batch for batch workloads separately |
+| **Only via Claude API** | Not available on AWS Bedrock, Google Vertex, or Azure | Must use Anthropic's API directly |
+| **Rate limits** | 60 create requests/min, 600 read requests/min | Contact enterprise sales for higher limits |
+| **Always-on costs** | 24/7 agents accumulate ~$58/month runtime alone | Design agents to be session-based rather than always-on where possible |
+
+### Community Concerns (from Hacker News Discussion)
+
+- **Single-provider dependency** is the most common criticism — developers prefer mixing models for different tasks
+- **Pricing at scale** — some argue self-hosted infrastructure is cheaper for high-volume use cases ($6-10K/month for dedicated hardware)
+- **Uptime concerns** — reports of "single 9 uptime" suggest the platform is not yet enterprise-grade
+- **Limited customization** compared to custom agent harnesses — some developers want fine-grained control over confirmation flows, context management, etc.
+
+[Source: Hacker News Discussion](https://news.ycombinator.com/item?id=47693047)
+
+---
+
+## 8. Comparison with Alternatives
+
+### Claude Managed Agents vs. OpenAI vs. Google vs. Self-Hosted
+
+| Feature | Claude Managed Agents | OpenAI Responses API | Google ADK + Vertex | Self-Hosted (n8n, LangGraph) |
+|---------|----------------------|---------------------|--------------------|-----------------------------|
+| **Type** | Fully managed platform | API + SDK (you host) | SDK + managed option | You build everything |
+| **Models** | Claude only | OpenAI models only | Google models (+ others) | Any model |
+| **Hosting** | Anthropic cloud | Your infrastructure | Google Cloud / yours | Your infrastructure |
+| **Built-in sandbox** | Yes (containers) | No (you provide) | Yes (Vertex) | No (you provide) |
+| **MCP support** | Native | No | No | Via plugins |
+| **Session persistence** | Built-in | You implement | Partial | You implement |
+| **Error recovery** | Automatic | You implement | Partial | You implement |
+| **Multi-agent** | Research preview | Via Agents SDK | Via A2A protocol | Full flexibility |
+| **Setup time** | Days | Weeks | Weeks | Weeks-months |
+| **Pricing** | Tokens + $0.08/hr | Tokens only | Tokens + compute | Compute only |
+| **Lock-in risk** | High | Medium | Medium | Low |
+| **Best for** | Fast deployment, long-running tasks | Custom control, multi-model | Google ecosystem users | Maximum flexibility |
+
+### Key Strategic Differences
+
+- **Anthropic** bets on **safety as infrastructure** — managed sandboxing, credential isolation, guardrails built in
+- **OpenAI** bets on **vertical integration** — deepest model capabilities, moving toward the Responses API (Assistants API deprecated, shutdown August 2026)
+- **Google** bets on **platform depth** — A2A protocol for cross-vendor agent interoperability, deep cloud integration
+
+[Source: Composio](https://composio.dev/content/claude-agents-sdk-vs-openai-agents-sdk-vs-google-adk) [Source: MindStudio](https://www.mindstudio.ai/blog/anthropic-vs-openai-vs-google-agent-strategy) [Source: Morphllm](https://www.morphllm.com/ai-agent-framework)
+
+### For a Claude Code Power User
+
+If you already use Claude Code extensively, Managed Agents shares the same underlying infrastructure — same tools (Bash, Read, Write, Edit, Grep, Glob, WebSearch, WebFetch), same agent loop, same context management. The Claude Agent SDK is literally "the same infrastructure that powers Claude Code, but programmable in Python and TypeScript." [Source: Claude Agent SDK Docs](https://platform.claude.com/docs/en/agent-sdk/overview)
+
+The upgrade path:
+1. **Claude Code** — interactive coding assistant (what you use now)
+2. **Claude Agent SDK** — build custom agents with the same tools, run locally
+3. **Claude Managed Agents** — deploy those agents to Anthropic's cloud for production use
+
+---
+
+## Key Findings
+
+1. **Claude Managed Agents is a production-ready (beta) hosted agent platform** — launched April 8, 2026, available to all API accounts. [Source](https://platform.claude.com/docs/en/managed-agents/overview)
+
+2. **Pricing is transparent and reasonable for moderate use** — $0.08/session-hour + standard token rates. A 20-minute customer support interaction costs $0.13-0.53. [Source](https://platform.claude.com/docs/en/about-claude/pricing)
+
+3. **Setup is fast** — create agent, create environment, start session. Early adopters like Rakuten deployed in under a week. [Source](https://findskill.ai/blog/claude-managed-agents-explained/)
+
+4. **The brain/hands/session architecture is robust** — stateless components, automatic error recovery, 60%+ latency improvements. [Source](https://www.anthropic.com/engineering/managed-agents)
+
+5. **Vendor lock-in is the primary risk** — Claude-only, Anthropic infrastructure only. Community sentiment confirms this is the top concern. [Source](https://news.ycombinator.com/item?id=47693047)
+
+6. **For a travel agency**, the best starting points are email triage, document processing, and competitive research — lower risk, high ROI. Autonomous booking is technically possible but the trust barrier remains (only 2% of travelers trust AI booking). [Source](https://www.oag.com/blog/march-2026-the-month-agentic-travel-gets-real)
+
+7. **Advanced features (multi-agent, memory, outcomes) are in research preview** — not yet publicly available but promising for complex workflows. [Source](https://platform.claude.com/docs/en/managed-agents/overview)
+
+---
+
+## Recommendations for a Travel Agency CEO
+
+### Start Here (Low Risk, High Learning)
+
+1. **Email triage agent** — process incoming customer emails, categorize, draft responses
+2. **Competitive pricing reports** — weekly automated research on competitor offerings
+3. **Document extraction** — pull data from booking confirmations, invoices automatically
+
+### Build Toward (Medium Risk)
+
+4. **Customer support agent** — handle FAQ and booking status inquiries via chat
+5. **Itinerary generation** — research-backed travel itinerary creation for clients
+
+### Future Vision (Requires Maturity)
+
+6. **Booking automation** — when MCP integrations mature and multi-agent features are GA
+7. **Multi-agent workflows** — research agent + booking agent + quality check agent working together
+
+### Practical Next Steps
+
+1. Get an Anthropic API key if you don't have one
+2. Run through the quickstart with a simple task
+3. Build a proof-of-concept email triage agent using your real (anonymized) customer emails
+4. Measure cost and quality for 100 real tasks before committing to production
+
+---
+
+## Unanswered Questions
+
+- What are the specific SLA commitments for Managed Agents in production? (Beta has no SLA)
+- How does Anthropic handle data residency for EU-based travel agencies?
+- What is the roadmap for multi-agent and memory features moving to GA?
+- Are there volume discounts specifically for Managed Agents runtime (not just tokens)?
+- How do managed agents perform with non-English customer communications?
+
+---
+
+## Sources
+
+- [Claude Managed Agents Overview — Official Docs](https://platform.claude.com/docs/en/managed-agents/overview)
+- [Claude Managed Agents Quickstart — Official Docs](https://platform.claude.com/docs/en/managed-agents/quickstart)
+- [Claude API Pricing — Official Docs](https://platform.claude.com/docs/en/about-claude/pricing)
+- [Scaling Managed Agents: Decoupling the Brain from the Hands — Anthropic Engineering](https://www.anthropic.com/engineering/managed-agents)
+- [Claude Agent SDK Overview — Official Docs](https://platform.claude.com/docs/en/agent-sdk/overview)
+- [Claude Managed Agents Explained — FindSkill.ai](https://findskill.ai/blog/claude-managed-agents-explained/)
+- [Anthropic Launches Claude Managed Agents — SiliconANGLE](https://siliconangle.com/2026/04/08/anthropic-launches-claude-managed-agents-speed-ai-agent-development/)
+- [Claude Managed Agents — Hacker News Discussion](https://news.ycombinator.com/item?id=47693047)
+- [Claude Agent SDK vs OpenAI vs Google ADK — Composio](https://composio.dev/content/claude-agents-sdk-vs-openai-agents-sdk-vs-google-adk)
+- [Anthropic vs OpenAI vs Google Agent Strategy — MindStudio](https://www.mindstudio.ai/blog/anthropic-vs-openai-vs-google-agent-strategy)
+- [AI Agent Frameworks in 2026 — Morphllm](https://www.morphllm.com/ai-agent-framework)
+- [March 2026: The Month Agentic Travel Gets Real — OAG](https://www.oag.com/blog/march-2026-the-month-agentic-travel-gets-real)
+- [2026 Travel Revolution: Agentic AI — Travel and Tour World](https://www.travelandtourworld.com/news/article/2026-travel-revolution-how-agentic-ai-is-set-to-completely-transform-the-way-you-book-flights-hotels-and-vacations-autonomous-ai-will-handle-it-all/)
+- [OpenAI Assistants API Deprecation & Alternatives — Eesel.ai](https://www.eesel.ai/blog/openai-assistants-api)
 
 ---
 
@@ -172,3 +448,11 @@ Both are harmonised standards under Directive 2014/33/EU. [Source](https://eur-l
 > While sources are cited, AI-generated content may contain inaccuracies, outdated information,
 > or hallucinated details. Always verify critical facts against primary sources before making
 > decisions based on this research.
+
+---
+
+## Research Log
+
+| # | Score | Delta | Gaps | Action |
+|---|-------|-------|------|--------|
+| 1 | 75 | +75 | 2 gaps | commit — threshold reached |
