@@ -1,10 +1,11 @@
 """
 Web search adapter for autoresearch.
 
-Supports multiple search backends:
-1. SearchAPI.io (Google Search) — requires SEARCHAPI_API_KEY
-2. OpenRouter LLM with web search grounding (fallback)
-3. Direct URL fetching via httpx
+Supports multiple search backends (priority order):
+1. Perplexity Sonar API — best quality, returns cited answers (PERPLEXITY_API_KEY)
+2. SearchAPI.io (Google Search) — raw search results (SEARCHAPI_API_KEY)
+3. DuckDuckGo HTML lite — free fallback (unreliable)
+4. Direct URL fetching via httpx
 """
 
 from __future__ import annotations
@@ -20,7 +21,24 @@ import httpx
 logger = logging.getLogger(__name__)
 
 SEARCHAPI_BASE = "https://www.searchapi.io/api/v1/search"
+PERPLEXITY_BASE = "https://api.perplexity.ai/chat/completions"
 DEFAULT_TIMEOUT = 30.0
+
+# Path to centralized credentials
+VT_SHARED_ENV = os.path.expanduser("~/Claude Code/vt-shared/.env")
+
+
+def _load_key_from_vt_shared(key_name: str) -> str:
+    """Load a key from vt-shared/.env (plain text, single source of truth)."""
+    try:
+        with open(VT_SHARED_ENV) as f:
+            for line in f:
+                line = line.strip()
+                if line.startswith(f"{key_name}=") and not line.startswith("#"):
+                    return line.split("=", 1)[1].strip()
+    except FileNotFoundError:
+        pass
+    return ""
 
 
 @dataclass
@@ -36,11 +54,14 @@ class SearchResult:
 class Searcher:
     """Web search adapter with multiple backends."""
     searchapi_key: str | None = field(default=None)
+    perplexity_key: str | None = field(default=None)
     timeout: float = DEFAULT_TIMEOUT
 
     def __post_init__(self):
         if self.searchapi_key is None:
-            self.searchapi_key = os.environ.get("SEARCHAPI_API_KEY")
+            self.searchapi_key = os.environ.get("SEARCHAPI_API_KEY") or _load_key_from_vt_shared("SEARCHAPI_API_KEY") or None
+        if self.perplexity_key is None:
+            self.perplexity_key = os.environ.get("PERPLEXITY_API_KEY") or _load_key_from_vt_shared("PERPLEXITY_API_KEY") or None
 
     # ------------------------------------------------------------------
     # Public API
@@ -67,7 +88,7 @@ class Searcher:
         """Fetch full text content from a URL."""
         try:
             with httpx.Client(timeout=self.timeout, follow_redirects=True) as client:
-                resp = client.get(url, headers={"User-Agent": "autoresearch/1.0"})
+                resp = client.get(url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"})
                 resp.raise_for_status()
                 return self._extract_text(resp.text)
         except Exception as e:
@@ -79,10 +100,62 @@ class Searcher:
     # ------------------------------------------------------------------
 
     def _search_single(self, query: str, max_results: int) -> list[SearchResult]:
-        """Search using the best available backend."""
+        """Search using the best available backend (priority: Perplexity > SearchAPI > DDG)."""
+        if self.perplexity_key:
+            results = self._search_perplexity(query, max_results)
+            if results:
+                return results
+            logger.warning("Perplexity returned no results, trying fallbacks")
         if self.searchapi_key:
             return self._search_searchapi(query, max_results)
         return self._search_duckduckgo_html(query, max_results)
+
+    def _search_perplexity(self, query: str, max_results: int) -> list[SearchResult]:
+        """Search via Perplexity Sonar API — returns answer + cited sources."""
+        try:
+            with httpx.Client(timeout=self.timeout) as client:
+                resp = client.post(
+                    PERPLEXITY_BASE,
+                    headers={
+                        "Authorization": f"Bearer {self.perplexity_key}",
+                        "Content-Type": "application/json",
+                    },
+                    json={
+                        "model": "sonar",
+                        "messages": [
+                            {"role": "system", "content": "Provide factual answers with specific data, statistics, and dates. Be comprehensive."},
+                            {"role": "user", "content": query},
+                        ],
+                    },
+                )
+                resp.raise_for_status()
+                data = resp.json()
+
+            results: list[SearchResult] = []
+            answer = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+            citations = data.get("citations", [])
+
+            # Create a result from the synthesized answer
+            if answer:
+                results.append(SearchResult(
+                    url="perplexity:sonar",
+                    title=f"Perplexity: {query[:80]}",
+                    snippet=answer[:300],
+                    content=answer,
+                ))
+
+            # Add individual cited sources
+            for url in citations[:max_results - 1]:
+                results.append(SearchResult(
+                    url=url,
+                    title=url.split("/")[-1][:60] if "/" in url else url[:60],
+                    snippet="",
+                ))
+
+            return results
+        except Exception as e:
+            logger.warning("Perplexity search failed for query %r: %s", query, e)
+            return []
 
     def _search_searchapi(self, query: str, max_results: int) -> list[SearchResult]:
         """Search via SearchAPI.io (Google Search)."""
@@ -115,7 +188,7 @@ class Searcher:
                 resp = client.get(
                     "https://html.duckduckgo.com/html/",
                     params={"q": query},
-                    headers={"User-Agent": "autoresearch/1.0"},
+                    headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36"},
                 )
                 resp.raise_for_status()
                 return self._parse_ddg_html(resp.text, max_results)

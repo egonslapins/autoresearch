@@ -12,8 +12,9 @@ Usage:
     python autoresearch.py "topic" --model google/gemini-2.5-flash-preview
 
 Requires:
-    - OPENROUTER_API_KEY in environment (for LLM calls)
-    - Optional: SEARCHAPI_API_KEY (for Google search; falls back to DuckDuckGo)
+    - OPENROUTER_API_KEY in environment or ~/Claude Code/vt-shared/.env
+    - Auto-loads PERPLEXITY_API_KEY from vt-shared/.env for web search (best quality)
+    - Optional: SEARCHAPI_API_KEY (Google search fallback)
 """
 
 import argparse
@@ -92,10 +93,17 @@ Examples:
         datefmt="%H:%M:%S",
     )
 
-    # Validate API key
+    # Validate API key — try env first, then vt-shared/.env
     if not os.environ.get("OPENROUTER_API_KEY"):
-        print("ERROR: OPENROUTER_API_KEY environment variable is required.", file=sys.stderr)
-        print("Set it with: export OPENROUTER_API_KEY='sk-or-v1-...'", file=sys.stderr)
+        vt_shared = os.path.expanduser("~/Claude Code/vt-shared/.env")
+        if os.path.exists(vt_shared):
+            with open(vt_shared) as f:
+                for line in f:
+                    if line.strip().startswith("OPENROUTER_API_KEY="):
+                        os.environ["OPENROUTER_API_KEY"] = line.strip().split("=", 1)[1]
+                        break
+    if not os.environ.get("OPENROUTER_API_KEY"):
+        print("ERROR: OPENROUTER_API_KEY not found in env or ~/Claude Code/vt-shared/.env", file=sys.stderr)
         sys.exit(1)
 
     # Run the research loop
