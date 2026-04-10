@@ -313,6 +313,57 @@ Lead magnets can triple email signup rates compared to no incentive. However, di
 
 ---
 
+## 8. Pre-Campaign Checklist
+
+### Step 1: Clean Your Email List (Week 1)
+
+Run all 2,478 email addresses through an email verification service. This is NON-NEGOTIABLE before sending.
+
+**Recommended services and pricing for ~2,500 emails:**
+
+| Service | Cost for 2,500 | Speed | Notes |
+|---------|----------------|-------|-------|
+| [NeverBounce](https://www.neverbounce.com/) | ~$8-10 | Minutes | Pay-as-you-go, no commitment |
+| [EmailListVerify](https://emaillistverify.com/) | ~$5-7 | Minutes | Domain validation + spam trap removal |
+| [ZeroBounce](https://www.zerobounce.net/) | ~$15-20 | Minutes | Also scores email quality |
+| [MillionVerifier](https://www.millionverifier.com/) | ~$3-5 | Minutes | Credits never expire |
+
+**Expected results from cleaning:** For a 4-year-old list, expect 10-20% invalid addresses (250-500 removals), leaving ~2,000-2,230 sendable addresses. [Source: NeverBounce](https://www.neverbounce.com/)
+
+### Step 2: Technical Setup (Week 1)
+
+- [ ] SPF record configured for sending domain
+- [ ] DKIM signing enabled
+- [ ] DMARC policy set (start with p=none for monitoring)
+- [ ] Unsubscribe link working and tested
+- [ ] Suppression list loaded (anyone who previously opted out)
+- [ ] Reply-to address monitored (some people reply instead of clicking)
+
+### Step 3: Content Preparation (Week 1-2)
+
+- [ ] 3 email templates designed (mobile-first)
+- [ ] Personalization fields mapped (name, destination, trip date)
+- [ ] Lead magnet created (travel guide PDF or similar)
+- [ ] Landing page for newsletter opt-in ready
+- [ ] Preference center built (weekly/bi-weekly/monthly options)
+
+### Step 4: Segmentation and Scheduling (Week 2)
+
+- [ ] List segmented by recency (4 tiers)
+- [ ] Batch schedule planned (most recent first)
+- [ ] A/B test variants prepared (2 subject lines minimum)
+- [ ] Monitoring dashboard set up (open rate, clicks, bounces, complaints)
+
+### Step 5: Send and Monitor (Week 2-4)
+
+- [ ] Batch 1 sent (200-300 most recent customers)
+- [ ] 24-hour metrics check before Batch 2
+- [ ] Continue batches if metrics healthy
+- [ ] Suppress non-openers after full sequence
+- [ ] Report final results
+
+---
+
 ## Key Findings
 
 1. **Legally permissible** — Latvian soft opt-in exception allows emailing existing customers about similar services without prior consent, if all 4 conditions are met — [DLA Piper Latvia](https://www.dlapiperdataprotection.com/index.html?t=electronic-marketing&c=LV)
@@ -327,11 +378,10 @@ Lead magnets can triple email signup rates compared to no incentive. However, di
 
 ## Neatbildeti jautajumi
 
-- Exact opt-in conversion rates specifically for travel industry re-permission campaigns
-- Whether to include a discount/incentive for newsletter sign-up or keep it content-only
-- Specific email sending platform recommendations for Latvian market
-- How to handle customers whose email addresses bounce — alternative re-contact methods
-- Optimal day of week and time of day for travel reactivation emails
+- Exact opt-in conversion rates specifically for travel industry re-permission campaigns (no travel-specific case study found)
+- Specific email sending platform recommendations for Latvian market (Mailchimp, Brevo, and Omnisend all support Latvian GDPR requirements)
+- How to handle customers whose email addresses bounce — SMS or postal mail as alternatives?
+- Double opt-in vs. single opt-in for the newsletter subscription step
 
 ---
 
@@ -350,6 +400,12 @@ Lead magnets can triple email signup rates compared to no incentive. However, di
 - [Warmforge — Sender Reputation](https://www.warmforge.ai/blog/how-email-sender-reputation-is-damaged-how-to-improve-it)
 - [Campaign Monitor — Opt-In Emails and Permissions](https://www.campaignmonitor.com/resources/guides/permission/)
 - [Selzy — Email Marketing for Travel Agencies](https://selzy.com/en/blog/email-marketing-for-travel-agencies/)
+- [Zigpoll — Lapsed Customer Segmentation](https://www.zigpoll.com/content/how-can-we-effectively-segment-lapsed-customers-to-personalize-our-winback-email-campaigns-and-maximize-reengagement-rates)
+- [MailerLite — Best Time to Send Email 2026](https://www.mailerlite.com/blog/best-time-to-send-email)
+- [Customer.io — Email Sending Schedule](https://customer.io/learn/lifecycle-marketing/email-sending-schedule)
+- [BDOW — Email Signup Benchmarks](https://bdow.com/stories/email-signup-benchmarks/)
+- [NeverBounce — Email Verification](https://www.neverbounce.com/)
+- [EmailListVerify — List Cleaning](https://emaillistverify.com/)
 
 ---
 
@@ -358,3 +414,4 @@ Lead magnets can triple email signup rates compared to no incentive. However, di
 | # | Score | Delta | Gaps | Action |
 |---|-------|-------|------|--------|
 | 1 | 45 | +45 | 5 gaps | commit — initial draft |
+| 2 | 58 | +13 | 4 gaps | commit — added segmentation, timing, incentive strategy, pre-campaign checklist |
