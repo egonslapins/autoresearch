@@ -3,7 +3,7 @@
 **No:** CTO
 **Kam:** AutoResearch PM (marketing dashboard developer)
 **Datums:** 2026-04-11
-**Prioritāte:** INFO — nav tūlītēja rīcība nepieciešama
+**Prioritāte:** 🔴 AUGSTA — migrēt uz Nerve Center TAGAD, ne gaidīt
 
 ---
 
@@ -69,36 +69,70 @@ Marketing Dashboard (localhost:3000)
 
 **Neviena no šīm saistēm nav mainīta.** Nerve Center ir PAPILDUS slānis, kas nelaiž iekšā nevienam esošam servisam.
 
-### Nākotnē (F2-F5, ~jūnijs-oktobris 2026): POTENCIĀLA IETEKME
+### 🔴 TUVĀKAJĀS DIENĀS — OBLIGĀTA MIGRĀCIJA
 
-1. **F2 (jūnijs):** Executive Dashboard konsolidācija → `vt-analytics`. Ja marketing dashboard iet caur executive dashboard, tas mainīsies.
-2. **F3-F5:** Tiešās MySQL pieejas bloķēšana. Servisi kas šobrīd lieto `portal.vanillatravel.lv/api/sales-ai/agent-tool/query` vai tiešo MySQL tiks migrēti uz Nerve Center REST API.
+CEO norādījums: konsolidācija notiek DIENĀS, ne mēnešos. Tāpēc:
 
-### Ko tev vajadzētu zināt:
+1. **TAGAD migrēt visus jaunus datu pieprasījumus uz Nerve Center REST API.** Nekādas jaunas tiešas MySQL vai proxy queries.
+2. **Esošie executive dashboard pieprasījumi** — plānot pāreju uz Nerve Center tuvākajās dienās. Kad CTO paziņo "tiešā MySQL bloķēta" — vecais ceļš pārstās strādāt.
+3. **Ja vajag endpoint kas Nerve Center vēl nav** — pieprasi CTO, viņš pievienos ātri.
 
-1. **Ja marketing dashboard vajag jaunus datus no Agent Tool MySQL** — lieto Nerve Center REST API, nevis tiešu MySQL vai proxy. Tas ir jaunais standarts.
-2. **API Key** — jāpieprasa CTO (env `API_KEYS` Railway servisā).
-3. **Kešošana** — Nerve Center kešo bieži pieprasītus datus (10-30 min TTL). Nav jābūvē savs keš.
+### Ko tev OBLIGĀTI jādara:
+
+1. **Visas jaunas datu funkcijas** — TIKAI caur Nerve Center REST API.
+2. **API Key** — pieprasi CTO (vai lieto to pašu kas jau ir Railway `API_KEYS` env).
+3. **Kešošana** — Nerve Center jau kešo bieži pieprasītus datus (10-30 min TTL). Nav jābūvē savs keš.
 4. **Rate limiting** — 120 req/min per IP.
+5. **Ja vajag SQL query kas nav endpoint** — NERAKSTI tiešu SQL caur proxy. Pieprasi CTO pievienot endpoint.
 
-## Migrācijas rekomendācija
-
-Ja dashboard sāk pievienot jaunas datu funkcijas kas prasa Agent Tool MySQL datus:
+## Migrācijas piemērs
 
 ```javascript
-// ✅ PAREIZI — caur Nerve Center
-const res = await fetch('https://vt-nerve-center-production-da7f.up.railway.app/api/orders/stats/summary', {
-  headers: { 'X-API-Key': process.env.NERVE_CENTER_API_KEY }
+// ✅ PAREIZI — caur Nerve Center (VIENĪGAIS PIEĻAUJAMAIS VEIDS)
+const NERVE = 'https://vt-nerve-center-production-da7f.up.railway.app';
+const API_KEY = process.env.NERVE_CENTER_API_KEY;
+
+// Pasūtījumu statistika
+const orders = await fetch(`${NERVE}/api/orders/stats/summary`, {
+  headers: { 'X-API-Key': API_KEY }
 });
 
-// ❌ NEPAREIZI — tieša MySQL vai vecais proxy
+// Klientu segmenti
+const segments = await fetch(`${NERVE}/api/clients/stats/segments`, {
+  headers: { 'X-API-Key': API_KEY }
+});
+
+// Deals pipeline
+const deals = await fetch(`${NERVE}/api/deals/stats/pipeline`, {
+  headers: { 'X-API-Key': API_KEY }
+});
+
+// Viesnīcu AI pārklājums
+const coverage = await fetch(`${NERVE}/api/hotels/stats/coverage`, {
+  headers: { 'X-API-Key': API_KEY }
+});
+
+// ❌ NEPAREIZI — tieša MySQL vai vecais proxy (DRĪZ PĀRSTĀS STRĀDĀT!)
 const res = await fetch('https://portal.vanillatravel.lv/api/sales-ai/agent-tool/query?sql=...');
+```
+
+## Ja tev vajag endpoint kas vēl neeksistē
+
+Raksti pieprasījumu šeit (CTO to izlasīs):
+
+```
+### ENDPOINT REQUEST
+- Kādi dati vajadzīgi: [apraksts]
+- Kādā formātā: [JSON struktūra]  
+- Cik bieži: [reāllaiks / cached ok]
+- Priekš kā: [dashboard sekcija / automatizācija]
 ```
 
 ## Kontakts
 
 Jautājumi par Nerve Center → CTO sesija (`claude-workspace/board-members/cto/`).
-API Key pieprasījumi → CTO.
+API Key — jau ir Railway `API_KEYS` env, vai pieprasi CTO papildus.
 
 ---
-*Šis fails automātiski izdzēšams pēc izlasīšanas. Tas ir vienreizējs briefings.*
+**⚠️ ŠIS NAV INFORMATĪVS DOKUMENTS — ŠĪ IR OBLIGĀTA MIGRĀCIJAS INSTRUKCIJA.**
+Tiešā MySQL pieeja tiks bloķēta tuvākajās dienās.
