@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "email-preview",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["/Users/egonsmac/Claude Code/vanilla-travel/marketing/email/welcome-sequence/html/server.js"],
+      "port": 8765
+    }
+  ]
+}
