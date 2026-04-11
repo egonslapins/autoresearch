@@ -2,6 +2,12 @@
   "version": "0.0.1",
   "configurations": [
     {
+      "name": "marketing-dashboard",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["/Users/egonsmac/Claude Code/vanilla-travel/marketing/dashboard/deploy/server.js"],
+      "port": 3000
+    },
+    {
       "name": "email-preview",
       "runtimeExecutable": "node",
       "runtimeArgs": ["/Users/egonsmac/Claude Code/vanilla-travel/marketing/email/welcome-sequence/html/server.js"],
