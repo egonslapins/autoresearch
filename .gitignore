@@ -34,3 +34,6 @@ Thumbs.db
 # Project outputs — research data may contain sensitive/client topics
 research.md
 results.tsv
+
+# Auto-generated session context
+CONTEXT.md
