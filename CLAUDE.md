@@ -1,3 +1,5 @@
+@/Users/egonsmac/Claude Code/claude-workspace/SHARED_INSTRUCTIONS.md
+
 # Autoresearch
 
 Karpathy-style iterative autonomous web research engine. Searches, analyzes, and synthesizes research on any topic through an iterative improvement loop.
