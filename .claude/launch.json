@@ -12,6 +12,12 @@
       "runtimeExecutable": "node",
       "runtimeArgs": ["/Users/egonsmac/Claude Code/vanilla-travel/marketing/email/welcome-sequence/html/server.js"],
       "port": 8765
+    },
+    {
+      "name": "sf-copilot",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "/Users/egonsmac/Claude Code/silver-fox/web", "run", "dev", "--", "--port", "3100"],
+      "port": 3100
     }
   ]
 }
